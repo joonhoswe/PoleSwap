@@ -1,0 +1,60 @@
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+#imported from models.py
+from .models import Object
+#imported from serializers.py
+from .serializers import ObjectSerializer
+
+# post 
+@api_view(['POST'])
+def createObject(request):
+    if request.method == 'POST':
+        #if method request is POST then create a ObjectSerializer instance 
+        #with the data that was entered from the website
+        serializer = ObjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            #saves the serializer into the database 
+            #returns HTTP status code 201 (successful)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #if serializer isn't valid then return unsuccessful HTTP request
+        print(serializer.errors)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# retrieve
+@api_view(['GET'])
+def getObjects(request):
+    if request.method == 'GET':
+        #get all the Objects from the database
+        Objects = Object.objects.all()
+        #serialize the Objects
+        serializer = ObjectSerializer(Objects, many=True)
+        #return the serialized Objects
+        return Response(serializer.data)
+
+# delete 
+@api_view(['DELETE'])
+def deleteObject(request, id):
+    Object = get_object_or_404(Object, id=id)
+    if request.method == 'DELETE':
+        Object.delete()
+        return Response({'message': 'Object deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+# patch
+@api_view(['PATCH'])
+def updateObject(request):
+    if request.method == 'PATCH':
+        id = request.data.get('id')
+
+        if not id:
+            return Response({'error': 'ID required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        Object = get_object_or_404(Object, id=id)
+
+        Object.save()
+
+        return Response({'message': 'Successfully updated'}, status=status.HTTP_200_OK)
