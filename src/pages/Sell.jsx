@@ -1,15 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
-
-const s3Client = new S3Client({
-    region: import.meta.env.VITE_AWS_REGION,
-    credentials: {
-        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
-    },
-});
 
 export const Sell = () => {
     const navigate = useNavigate();
@@ -32,6 +22,7 @@ export const Sell = () => {
         }));
     };
 
+    // Store selected files in our state
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
         setFormData(prev => ({
@@ -40,23 +31,7 @@ export const Sell = () => {
         }));
     };
 
-    const uploadImagesToS3 = async () => {
-        const imageUrls = [];
-        for (const file of formData.images) {
-            const fileName = `${uuidv4()}-${file.name}`;
-            const command = new PutObjectCommand({
-                Bucket: "poleswapperimages",
-                Key: fileName,
-                Body: file,
-                ContentType: file.type,
-            });
-            await s3Client.send(command);
-            const url = `https://poleswapperimages.s3.amazonaws.com/${fileName}`;
-            imageUrls.push(url);
-        }
-        return imageUrls;
-    };
-
+    // Submit the form data (including images) to Django
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -70,18 +45,20 @@ export const Sell = () => {
                 return;
             }
 
+            // Build a FormData with text fields + all images
             const formDataToSend = new FormData();
             formDataToSend.append('brand', formData.brand);
             formDataToSend.append('length', formData.length);
             formDataToSend.append('weight', formData.weight);
             formDataToSend.append('condition', formData.condition);
             formDataToSend.append('price', formData.price);
-            
+
             for (const image of formData.images) {
                 formDataToSend.append('images', image);
             }
 
-            const response = await fetch('http://127.0.0.1:8000/api/listings/', {
+            // POST to Django
+            const response = await fetch('http://127.0.0.1:8000/api/post/', {
                 method: 'POST',
                 body: formDataToSend,
             });
@@ -90,6 +67,7 @@ export const Sell = () => {
                 throw new Error('Failed to create listing');
             }
 
+            // On success, navigate somewhere (e.g. /listings)
             navigate('/listings');
         } catch (err) {
             setError('Failed to create listing. Please try again.');
@@ -113,6 +91,7 @@ export const Sell = () => {
             )}
 
             <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-6">
+                {/* BRAND */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Brand</label>
                     <select 
@@ -130,6 +109,7 @@ export const Sell = () => {
                     </select>
                 </div>
 
+                {/* LENGTH */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Length (ft)</label>
                     <select 
@@ -140,16 +120,18 @@ export const Sell = () => {
                     >
                         <option value="">Select Length</option>
                         {[...Array(23)].map((_, i) => {
-                            const length = 6 + i * 0.5;
+                            const lengthVal = 6 + i * 0.5;
                             return (
-                                <option key={length} value={length}>
-                                    {Math.floor(length)}'{length % 1 ? '6"' : ''}
+                                <option key={lengthVal} value={lengthVal}>
+                                    {Math.floor(lengthVal)}'
+                                    {lengthVal % 1 ? '6"' : ''}
                                 </option>
                             );
                         })}
                     </select>
                 </div>
 
+                {/* WEIGHT */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Weight (lbs)</label>
                     <select 
@@ -159,14 +141,18 @@ export const Sell = () => {
                         className="w-full rounded-lg border border-gray-300 px-4 py-2"
                     >
                         <option value="">Select Weight</option>
-                        {[...Array(39)].map((_, i) => (
-                            <option key={50 + i * 5} value={50 + i * 5}>
-                                {50 + i * 5}
-                            </option>
-                        ))}
+                        {[...Array(39)].map((_, i) => {
+                            const weightVal = 50 + i * 5;
+                            return (
+                                <option key={weightVal} value={weightVal}>
+                                    {weightVal}
+                                </option>
+                            );
+                        })}
                     </select>
                 </div>
 
+                {/* CONDITION */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Condition</label>
                     <select 
@@ -181,6 +167,7 @@ export const Sell = () => {
                     </select>
                 </div>
 
+                {/* PRICE */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Price ($)</label>
                     <input
@@ -193,6 +180,7 @@ export const Sell = () => {
                     />
                 </div>
 
+                {/* IMAGES */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Images</label>
                     <input
@@ -204,6 +192,7 @@ export const Sell = () => {
                     />
                 </div>
 
+                {/* SUBMIT */}
                 <button
                     type="submit"
                     disabled={isSubmitting}

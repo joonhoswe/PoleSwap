@@ -1,41 +1,57 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
-
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-#imported from models.py
+
 from .models import Object
-#imported from serializers.py
 from .serializers import ObjectSerializer
 from .utils import upload_to_s3
+import os
 
-# post 
+# get
 @api_view(['POST'])
 def createObject(request):
-    if request.method == 'POST':
-        #if method request is POST then create a ObjectSerializer instance 
-        #with the data that was entered from the website
-        serializer = ObjectSerializer(data=request.data)
-        if serializer.is_valid():
-            # Handle file upload
-            images = request.FILES.getlist('images')
-            image_urls = []
+    # 1) Pull the raw files
+    images = request.FILES.getlist('images')
+    image_urls = []
 
-            for image in images:
-                image_url = upload_to_s3(image, AWS_STORAGE_BUCKET_NAME)
-                if image_url:
-                    image_urls.append(image_url)
+    for image in images:
+        image_url = upload_to_s3(image, os.environ.get('AWS_BUCKET_NAME'))
+        if image_url:
+            image_urls.append(image_url)
 
-            # Save the object with the image URLs
-            serializer.save(image_urls=image_urls)
-            #saves the serializer into the database 
-            #returns HTTP status code 201 (successful)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #if serializer isn't valid then return unsuccessful HTTP request
-        print(serializer.errors)
-        
+    if not image_urls:
+        return Response(
+            {'image_urls': 'At least one image is required.'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # 2) Manually extract fields from request.data
+    #    (Avoid request.data.copy())
+    brand = request.data.get('brand')
+    length = request.data.get('length')
+    weight = request.data.get('weight')
+    condition = request.data.get('condition')
+    price = request.data.get('price')
+    
+    # 3) Build a plain dictionary including image_urls
+    serializer_data = {
+        'brand': brand,
+        'length': length,
+        'weight': weight,
+        'condition': condition,
+        'price': price,
+        'image_urls': image_urls,
+    }
+
+    # 4) Validate & save with serializer
+    serializer = ObjectSerializer(data=serializer_data)
+    if serializer.is_valid():
+        serializer.save()  
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        print("Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        
 # retrieve
 @api_view(['GET'])
 def getObjects(request):
