@@ -3,4 +3,5 @@ export const RoutePaths = {
   LISTINGS: '/browse',
   MY_LISTINGS: '/listings',
   SELL: '/sell',
+  CURRENT_LISTING: '/listings/:id',
 };
