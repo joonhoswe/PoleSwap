@@ -5,6 +5,7 @@ import { Home } from "../pages/Home.jsx";
 import { Listings } from "../pages/Listings.jsx";
 import { MyListings } from "../pages/MyListings.jsx";
 import { Sell } from "../pages/Sell.jsx";
+import { CurrentListing } from "../pages/CurrentListing.jsx";
 import { NotFound } from "./NotFound.jsx";
 import { Layout } from "./Layout.jsx";
 
@@ -39,6 +40,14 @@ export const Router = () => (
       element={
         <Layout>
           <Sell />
+        </Layout>
+      }
+    />
+    <Route
+      path={RoutePaths.CURRENT_LISTING}
+      element={
+        <Layout>
+          <CurrentListing />
         </Layout>
       }
     />

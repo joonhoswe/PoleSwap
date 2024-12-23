@@ -1,23 +1,53 @@
+import { useState, useEffect } from "react";
 import { PoleCard } from "../components/PoleCard";
 
 export const MyListings = () => {
+    const [listings, setListings] = useState([]);
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            const response = await fetch('http://127.0.0.1:8000/api/get/');
+            const data = await response.json();
+            setListings(data);
+        };
+        fetchListings();
+    }, []);
+
+    const handleDelete = async (id) => {
+        const response = await fetch(`http://127.0.0.1:8000/api/delete/${id}/`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            setListings(listings.filter(listing => listing.id !== id));
+        } else {
+            console.error('Failed to delete listing');
+        }
+    };
+
     return (
         <div className="mt-10 flex w-full flex-col items-center px-4 text-black">
             <div className="mb-12 text-center">
                 <h1 className="mb-4 text-4xl font-bold">My Listings</h1>
-                {/* <p className="text-gray-600">Manage your pole listings</p> */}
+                <p className="text-gray-600">Manage your pole listings</p>
             </div>
 
             <div className="w-full max-w-3xl">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <PoleCard
-                        brand="Nordic"
-                        length="14"
-                        weight={140}
-                        condition="New"
-                        price={599}
-                        imageUrl="/placeholder.jpg"
-                    />
+                <div className="p-4 ">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                        {listings.map(listing => (
+                            <PoleCard
+                                key={listing.id}
+                                id={listing.id}
+                                brand={listing.brand}
+                                length={listing.length}
+                                weight={listing.weight}
+                                condition={listing.condition}
+                                price={listing.price}
+                                imageUrl={listing.image_urls}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
