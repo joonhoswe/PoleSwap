@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from .models import Object
 #imported from serializers.py
 from .serializers import ObjectSerializer
+from .utils import upload_to_s3
 
 # post 
 @api_view(['POST'])
@@ -16,7 +17,17 @@ def createObject(request):
         #with the data that was entered from the website
         serializer = ObjectSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            # Handle file upload
+            images = request.FILES.getlist('images')
+            image_urls = []
+
+            for image in images:
+                image_url = upload_to_s3(image, AWS_STORAGE_BUCKET_NAME)
+                if image_url:
+                    image_urls.append(image_url)
+
+            # Save the object with the image URLs
+            serializer.save(image_urls=image_urls)
             #saves the serializer into the database 
             #returns HTTP status code 201 (successful)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

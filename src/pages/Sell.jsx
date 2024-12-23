@@ -1,5 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
+
+const s3Client = new S3Client({
+    region: import.meta.env.VITE_AWS_REGION,
+    credentials: {
+        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+    },
+});
 
 export const Sell = () => {
     const navigate = useNavigate();
@@ -30,6 +40,23 @@ export const Sell = () => {
         }));
     };
 
+    const uploadImagesToS3 = async () => {
+        const imageUrls = [];
+        for (const file of formData.images) {
+            const fileName = `${uuidv4()}-${file.name}`;
+            const command = new PutObjectCommand({
+                Bucket: "poleswapperimages",
+                Key: fileName,
+                Body: file,
+                ContentType: file.type,
+            });
+            await s3Client.send(command);
+            const url = `https://poleswapperimages.s3.amazonaws.com/${fileName}`;
+            imageUrls.push(url);
+        }
+        return imageUrls;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -50,23 +77,13 @@ export const Sell = () => {
             formDataToSend.append('condition', formData.condition);
             formDataToSend.append('price', formData.price);
             
-            formData.images.forEach((image, index) => {
-                formDataToSend.append(`images`, image);
-            });
+            for (const image of formData.images) {
+                formDataToSend.append('images', image);
+            }
 
-            const response = await fetch('http://127.0.0.1:8000/api/post/', {
+            const response = await fetch('http://127.0.0.1:8000/api/listings/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    brand: formData.brand,
-                    length: parseFloat(formData.length),
-                    weight: parseInt(formData.weight),
-                    condition: formData.condition,
-                    price: parseFloat(formData.price),
-                    image_urls: '', // Single URL for testing
-                }),
+                body: formDataToSend,
             });
 
             if (!response.ok) {
