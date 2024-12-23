@@ -15,10 +15,10 @@ export const Listings = () => {
         <div className="space-y-6">
           {/* Location */}
           <div className="space-y-2">
-            <label className="font-medium">Location</label>
+            <label className="font-medium">Zip Code</label>
             <input
               type="text"
-              placeholder="Enter location"
+              placeholder="Enter zip code"
               className="w-full rounded-lg border border-gray-300 px-4 py-2"
             />
             <select className="w-full rounded-lg border border-gray-300 px-4 py-2 mt-2">
@@ -163,13 +163,13 @@ export const Listings = () => {
                 />
               </svg>
             </button>
-            <button
+            {/* ADD GOOGLE MAPS INTEGRATION */}
+            {/* <button
               onClick={() => setViewMode("map")}
               className={`p-2 rounded-lg ${
                 viewMode === "map" ? "bg-blue-50 text-blue-500" : "text-gray-500"
               }`}
             >
-              {/* Map Icon */}
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -188,7 +188,7 @@ export const Listings = () => {
                      00-.553-.894L15 4m0 13V4m0 0L9 7"
                 />
               </svg>
-            </button>
+            </button> */}
           </div>
         </div>
 

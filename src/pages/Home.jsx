@@ -39,8 +39,8 @@ export const Home = () => {
                     />
                     <FeatureCard 
                         icon="verify"
-                        title="Verified Listings"
-                        description="All poles verified by the community"
+                        title="Live Listings"
+                        description="View only poles actively for sale"
                     />
                     <FeatureCard 
                         icon="chat"
