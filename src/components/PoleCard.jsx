@@ -9,7 +9,7 @@ export const PoleCard = ({ brand, length, weight, condition, price, imageUrl }) 
                 />
             </div>
             <h3 className="font-semibold">{`${brand} ${length}' ${weight}lbs`}</h3>
-            <p className="text-gray-600">{condition} Condition</p>
+            <p className="text-gray-600">{condition}</p>
             <p className="mt-2 font-bold text-blue-500">${price}</p>
         </div>
     );
