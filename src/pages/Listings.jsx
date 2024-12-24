@@ -228,7 +228,7 @@ export const Listings = () => {
                                 weight={listing.weight}
                                 condition={listing.condition}
                                 price={listing.price}
-                                imageUrl={listing.image_urls}
+                                imageUrls={listing.image_urls}
                             />
                         ))}
                     </div>

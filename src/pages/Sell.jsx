@@ -68,7 +68,7 @@ export const Sell = () => {
             }
 
             // On success, navigate somewhere (e.g. /listings)
-            navigate('/listings');
+            // navigate('/listings');
         } catch (err) {
             setError('Failed to create listing. Please try again.');
             console.error('Error creating listing:', err);

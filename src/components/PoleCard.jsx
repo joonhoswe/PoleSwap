@@ -7,7 +7,7 @@ export const PoleCard = ({ id, brand, length, weight, condition, price, imageUrl
             <div className="mb-2 h-40 bg-gray-100 overflow-hidden rounded-lg flex items-center justify-center">
                 {imageUrls.length > 0 ? (
                     <img 
-                        src={imageUrls[0] || Fallback} 
+                        src={imageUrls[0]} 
                         alt={`${brand} ${length}' ${weight}lbs pole`}
                         className="w-full h-full object-cover"
                     />
