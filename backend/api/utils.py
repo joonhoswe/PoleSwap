@@ -18,7 +18,7 @@ def upload_to_s3(file, bucket_name, object_name=None):
             object_name = file.name
 
         s3_client.upload_fileobj(file, bucket_name, object_name)
-        return f"https://{bucket_name}.s3.amazonaws.com/{object_name}"
+        return f"https://{bucket_name}.s3.{os.environ.get('AWS_REGION')}.amazonaws.com/{object_name}"
     except NoCredentialsError:
         print("Credentials not available")
         return None

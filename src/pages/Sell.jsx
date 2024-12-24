@@ -66,7 +66,8 @@ export const Sell = () => {
             if (!response.ok) {
                 throw new Error('Failed to create listing');
             }
-
+            
+            console.log("Successfully uploaded image.")
             // On success, navigate somewhere (e.g. /listings)
             // navigate('/listings');
         } catch (err) {
