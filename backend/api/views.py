@@ -26,7 +26,6 @@ def createObject(request):
         )
 
     # 2) Manually extract fields from request.data
-    #    (Avoid request.data.copy())
     brand = request.data.get('brand')
     length = request.data.get('length')
     weight = request.data.get('weight')
