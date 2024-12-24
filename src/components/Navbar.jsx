@@ -24,6 +24,10 @@ export const Navbar = () => {
                 <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
                     Browse
                 </Link>
+
+                <Link to={RoutePaths.SELL} className="hover:text-blue-500">
+                    Sell
+                </Link>
                 
                 <SignedOut>
                     <SignInButton className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
@@ -32,6 +36,10 @@ export const Navbar = () => {
                 </SignedOut>
 
                 <SignedIn>
+                    <Link to={RoutePaths.MY_LISTINGS} className="hover:text-blue-500">
+                        My Listings
+                    </Link>
+
                     <UserButton />
                 </SignedIn>
             </div>
