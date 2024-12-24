@@ -7,7 +7,7 @@ class Object(models.Model):
     weight = models.IntegerField(default='not specified')
     condition = models.CharField(max_length=20, default='not specified')
     price = models.DecimalField(max_digits=10, decimal_places=2, default='not specified')
-    image_urls = models.JSONField()  # Use JSONField to store an array of URLs
+    image_urls = models.JSONField(default=list)
     owner = models.CharField(max_length=50, default='admin')
 
     def __str__(self):
