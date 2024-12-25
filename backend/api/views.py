@@ -31,6 +31,8 @@ def createObject(request):
     weight = request.data.get('weight')
     condition = request.data.get('condition')
     price = request.data.get('price')
+    title = request.data.get('title')
+    description = request.data.get('description')
     owner = request.data.get('owner')
     
     # 3) Build a plain dictionary including image_urls
@@ -40,6 +42,8 @@ def createObject(request):
         'weight': weight,
         'condition': condition,
         'price': price,
+        'title': title,
+        'description': description,
         'image_urls': image_urls,
         'owner': owner,
     }

@@ -16,6 +16,7 @@ export const Sell = () => {
         weight: '',
         condition: '',
         price: '',
+        title: '',
         description: '',
         images: [],
         owner: email
@@ -49,7 +50,7 @@ export const Sell = () => {
         try {
             // Basic validation
             if (!formData.brand || !formData.length || !formData.weight || 
-                !formData.condition || !formData.price || !formData.description) {
+                !formData.condition || !formData.price || !formData.title || !formData.description) {
                 setError('Please fill in all required fields');
                 return;
             }
@@ -61,7 +62,8 @@ export const Sell = () => {
             formDataToSend.append('weight', formData.weight);
             formDataToSend.append('condition', formData.condition);
             formDataToSend.append('price', formData.price);
-            formDataToSend.append('description, formData.description')
+            formDataToSend.append('title', formData.title);
+            formDataToSend.append('description', formData.description);
 
             for (const image of formData.images) {
                 formDataToSend.append('images', image);
@@ -91,10 +93,9 @@ export const Sell = () => {
     };
 
     if (isSignedIn) return (
-        <div className="mt-10 flex w-full flex-col items-center px-4 text-black">
+        <div className="py-10 flex w-full min-h-full flex-col items-center px-4 text-black overflow-y-auto">
             <div className="mb-12 text-center">
                 <h1 className="mb-4 text-4xl font-bold">Sell Your Pole</h1>
-                <p className="text-gray-600">List your pole vaulting pole for sale</p>
             </div>
 
             {error && (
@@ -190,6 +191,19 @@ export const Sell = () => {
                         onChange={handleChange}
                         className="w-full rounded-lg border border-gray-300 px-4 py-2"
                         placeholder="Enter price"
+                    />
+                </div>
+
+                {/* TITLE */}
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium">Title</label>
+                    <input
+                        type="string"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                        placeholder="Enter a brief title"
                     />
                 </div>
 
