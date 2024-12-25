@@ -16,6 +16,7 @@ export const Sell = () => {
         weight: '',
         condition: '',
         price: '',
+        description: '',
         images: [],
         owner: email
     });
@@ -48,7 +49,7 @@ export const Sell = () => {
         try {
             // Basic validation
             if (!formData.brand || !formData.length || !formData.weight || 
-                !formData.condition || !formData.price) {
+                !formData.condition || !formData.price || !formData.description) {
                 setError('Please fill in all required fields');
                 return;
             }
@@ -60,6 +61,7 @@ export const Sell = () => {
             formDataToSend.append('weight', formData.weight);
             formDataToSend.append('condition', formData.condition);
             formDataToSend.append('price', formData.price);
+            formDataToSend.append('description, formData.description')
 
             for (const image of formData.images) {
                 formDataToSend.append('images', image);
@@ -188,6 +190,19 @@ export const Sell = () => {
                         onChange={handleChange}
                         className="w-full rounded-lg border border-gray-300 px-4 py-2"
                         placeholder="Enter price"
+                    />
+                </div>
+
+                {/* DESCRIPTION */}
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium">Description</label>
+                    <input
+                        type="string"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        className="w-full h-48 rounded-lg border border-gray-300 px-4 py-2"
+                        placeholder="Describe your pole"
                     />
                 </div>
 
