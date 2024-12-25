@@ -11,5 +11,6 @@ urlpatterns=[
     path('post/', createObject, name='createObject'),
     path('patch/', updateObject, name='updateObject'),
     path('get/', getObjects, name='getObjects'),
-    path('delete/<int:id>', deleteObject, name='deleteObject')
+    path('get/<int:id>/', getObjectById, name='getObjectById'),
+    path('delete/<int:id>/', deleteObject, name='deleteObject')
 ]

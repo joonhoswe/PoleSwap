@@ -1,13 +1,14 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
 
 from .models import Object
 from .serializers import ObjectSerializer
 from .utils import upload_to_s3
 import os
 
-# get
+# post
 @api_view(['POST'])
 def createObject(request):
     # 1) Pull the raw files
@@ -67,6 +68,13 @@ def getObjects(request):
         serializer = ObjectSerializer(Objects, many=True)
         #return the serialized Objects
         return Response(serializer.data)
+    
+# retrieve just one listing
+@api_view(['GET'])
+def getObjectById(request, id):
+    obj = get_object_or_404(Object, id=id)
+    serializer = ObjectSerializer(obj)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # delete 
 @api_view(['DELETE'])

@@ -24,7 +24,7 @@ export const Home = () => {
                         to={RoutePaths.SELL} 
                         className="px-8 py-3 text-lg font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
                     >
-                        Sell a Pole
+                        Sell Poles
                     </Link>
                 </div>
             </div>
@@ -35,7 +35,7 @@ export const Home = () => {
                     <FeatureCard 
                         icon="location"
                         title="Local First"
-                        description="Find poles in your area and meet local vaulters"
+                        description="Find poles in your area"
                     />
                     <FeatureCard 
                         icon="verify"
