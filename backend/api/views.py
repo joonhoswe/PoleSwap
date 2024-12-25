@@ -31,6 +31,7 @@ def createObject(request):
     weight = request.data.get('weight')
     condition = request.data.get('condition')
     price = request.data.get('price')
+    owner = request.data.get('owner')
     
     # 3) Build a plain dictionary including image_urls
     serializer_data = {
@@ -40,6 +41,7 @@ def createObject(request):
         'condition': condition,
         'price': price,
         'image_urls': image_urls,
+        'owner': owner,
     }
 
     # 4) Validate & save with serializer

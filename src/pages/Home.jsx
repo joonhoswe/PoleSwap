@@ -7,10 +7,10 @@ export const Home = () => {
             {/* Hero Section */}
             <div className="flex flex-col items-center justify-center flex-1 px-4 text-center">
                 <h1 className="mb-6 text-5xl font-bold text-gray-900">
-                    Find Your Perfect <span className="text-blue-500">Pole</span>
+                    Gear Up For Your Next <span className="text-blue-500">PR</span>
                 </h1>
                 <p className="mb-8 text-xl text-gray-600 max-w-2xl">
-                    The first marketplace dedicated to connecting pole vaulters. 
+                    The first marketplace dedicated to connecting pole vaulters. <br/>
                     Buy and sell poles with confidence in your local area.
                 </p>
                 <div className="flex gap-4">

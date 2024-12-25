@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react'
 
 export const Sell = () => {
+    const { isSignedIn, user, isLoaded } = useUser();
+    let email = "";
+    if (isSignedIn) {
+        email = user.primaryEmailAddress?.emailAddress;
+    }
+
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         brand: '',
@@ -9,7 +16,8 @@ export const Sell = () => {
         weight: '',
         condition: '',
         price: '',
-        images: []
+        images: [],
+        owner: email
     });
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,6 +65,8 @@ export const Sell = () => {
                 formDataToSend.append('images', image);
             }
 
+            formDataToSend.append('owner', formData.owner);
+
             // POST to Django
             const response = await fetch('http://127.0.0.1:8000/api/post/', {
                 method: 'POST',
@@ -78,7 +88,7 @@ export const Sell = () => {
         }
     };
 
-    return (
+    if (isSignedIn) return (
         <div className="mt-10 flex w-full flex-col items-center px-4 text-black">
             <div className="mb-12 text-center">
                 <h1 className="mb-4 text-4xl font-bold">Sell Your Pole</h1>
@@ -204,4 +214,6 @@ export const Sell = () => {
             </form>
         </div>
     );
+
+    return <div> not signed in </div>
 };
