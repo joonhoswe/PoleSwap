@@ -223,6 +223,7 @@ export const Listings = () => {
                             <PoleCard
                                 key={listing.id}
                                 id={listing.id}
+                                title={listing.title}
                                 brand={listing.brand}
                                 length={listing.length}
                                 weight={listing.weight}
