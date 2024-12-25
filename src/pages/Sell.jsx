@@ -196,13 +196,12 @@ export const Sell = () => {
                 {/* DESCRIPTION */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium">Description</label>
-                    <input
-                        type="string"
+                    <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        className="w-full h-48 rounded-lg border border-gray-300 px-4 py-2"
-                        placeholder="Describe your pole"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2 h-32 resize-none"
+                        placeholder="Enter a detailed description of the pole..."
                     />
                 </div>
 
