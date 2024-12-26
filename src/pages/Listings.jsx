@@ -120,6 +120,8 @@ export const Listings = () => {
                             <option value="essx">ESSX</option>
                             <option value="spirit">UCS Spirit</option>
                             <option value="pacer">Pacer</option>
+                            <option value="skypole">Skypole</option>
+                            <option value="dynasty">Dynasty</option>
                             <option value="nordic">Nordic</option>
                             <option value="altius">Altius</option>
                         </select>

@@ -199,6 +199,8 @@ export const Sell = () => {
               <option value="essx">ESSX</option>
               <option value="spirit">UCS Spirit</option>
               <option value="pacer">Pacer</option>
+              <option value="skypole">Skypole</option>
+              <option value="dynasty">Dynasty</option>
               <option value="nordic">Nordic</option>
               <option value="altius">Altius</option>
               <option value="other">Other</option>
