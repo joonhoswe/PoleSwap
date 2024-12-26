@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { Link } from "react-router-dom";
+import { RoutePaths } from "../general/RoutePaths";
+import ConfettiExplosion from "react-confetti-explosion";
 
 export const Sell = () => {
   const { isSignedIn, user } = useUser();
-  const navigate = useNavigate();
   let email = "";
   if (isSignedIn) {
     email = user?.primaryEmailAddress?.emailAddress ?? "";
@@ -26,6 +27,8 @@ export const Sell = () => {
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [posted, setPosted] = useState(false);
+  const [listingId, setListingId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,12 +105,20 @@ export const Sell = () => {
       if (!response.ok) {
         throw new Error("Failed to create listing");
       }
+
+      const data = await response.json();
+      setListingId(data.id);
+      setPosted(true);
+
     } catch (err) {
       setError("Failed to create listing. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+  }, [posted]);
 
   if (!isSignedIn) {
     return (
@@ -120,8 +131,8 @@ export const Sell = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen w-full bg-white px-4 py-12">
+  return !posted ? (
+    <div className="h-screen w-full bg-white px-4 py-4">
       <div className="mx-auto w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
@@ -132,7 +143,7 @@ export const Sell = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Title <span className="text-red-500">*</span>
@@ -293,8 +304,8 @@ export const Sell = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Images
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Image(s) <span className="text-red-500">*</span>
             </label>
             <input
               type="file"
@@ -304,6 +315,7 @@ export const Sell = () => {
               className="w-full rounded border border-gray-300 px-4 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 hover:file:bg-gray-200 focus:outline-none"
             />
           </div>
+          <p className="text-gray-500 pb-6"><span className="text-red-500">*</span> indicates a required field</p>
           <button
             type="submit"
             disabled={isSubmitting}
@@ -316,5 +328,27 @@ export const Sell = () => {
         </form>
       </div>
     </div>
+  ) : (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 py-12">
+        <div className="relative mx-auto w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
+            <div className="flex flex-col items-center space-y-6">
+                <ConfettiExplosion 
+                particleCount={200}
+                duration={3000}
+                />
+                <h1 className="text-6xl">🎉</h1>
+                <h2 className="text-2xl font-bold text-gray-800">Congratulations!</h2>
+                <p className="text-gray-600 text-center">
+                Your listing has been successfully posted.
+                </p>
+                <Link
+                to={RoutePaths.CURRENT_LISTING.replace(':id', listingId)}
+                className="px-6 py-2 text-white font-semibold bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
+                >
+                View Listing
+                </Link>
+            </div>
+        </div>
+  </div>
   );
 };
