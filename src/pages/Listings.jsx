@@ -5,6 +5,7 @@ export const Listings = () => {
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState([]);
     const [viewMode, setViewMode] = useState("grid");
+    const [sortOption, setSortOption] = useState("recent");
     const [filters, setFilters] = useState({
         zipCode: '',
         distance: '',
@@ -29,39 +30,50 @@ export const Listings = () => {
 
     useEffect(() => {
         applyFilters();
-    }, [filters, listings]);
+    }, [filters, listings, sortOption]);
 
     const applyFilters = () => {
-        let filtered = listings;
-
+        // 1) Copy listings into a new array so we don't mutate state directly
+        let filtered = [...listings];
+      
+        // 2) Filtering
         if (filters.brand) {
-            filtered = filtered.filter(listing => listing.brand === filters.brand);
+          filtered = filtered.filter(listing => listing.brand === filters.brand);
         }
         if (filters.length) {
-            filtered = filtered.filter(listing => listing.length === filters.length);
+          filtered = filtered.filter(listing => listing.length === filters.length);
         }
         if (filters.weight) {
-            filtered = filtered.filter(listing => listing.weight === filters.weight);
+          filtered = filtered.filter(listing => listing.weight === filters.weight);
         }
         if (filters.priceMin) {
-            filtered = filtered.filter(listing => listing.price >= filters.priceMin);
+          filtered = filtered.filter(listing => listing.price >= filters.priceMin);
         }
         if (filters.priceMax) {
-            filtered = filtered.filter(listing => listing.price <= filters.priceMax);
+          filtered = filtered.filter(listing => listing.price <= filters.priceMax);
         }
         if (filters.conditionNew) {
-            filtered = filtered.filter(listing => listing.condition === 'new');
+          filtered = filtered.filter(listing => listing.condition === 'new');
         }
         if (filters.conditionUsed) {
-            filtered = filtered.filter(listing => listing.condition === 'used');
+          filtered = filtered.filter(listing => listing.condition === 'used');
         }
         if (filters.distance) {
-            // Implement distance filtering logic here
-            // For example, you might want to filter based on a location API or a predefined list of locations
+          // distance filtering logic here
         }
-
+      
+        // 3) Sorting on the *copied* array
+        if (sortOption === "recent") {
+          filtered.sort((a, b) => new Date(b.date_time_posted) - new Date(a.date_time_posted));
+        } else if (sortOption === "price_low") {
+          filtered.sort((a, b) => a.price - b.price);
+        } else if (sortOption === "price_high") {
+          filtered.sort((a, b) => b.price - a.price);
+        }
+      
+        // 4) Set the new filtered list
         setFilteredListings(filtered);
-    };
+      };
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -73,10 +85,12 @@ export const Listings = () => {
 
     return (
         <div className="flex flex-col md:flex-row w-full min-h-[calc(100vh-5rem)]">
+            
             {/* Left Sidebar - Filters */}
             <div className="w-full md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
+
                     {/* Zip Code */}
                     <div className="space-y-2">
                         <label className="font-medium">Zip Code</label>
@@ -89,6 +103,7 @@ export const Listings = () => {
                             className="w-full rounded-lg border border-gray-300 px-4 py-2"
                         />
                     </div>
+
                     {/* Distance Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Distance</label>
@@ -100,6 +115,7 @@ export const Listings = () => {
                             <option value="100">Within 100 miles</option>
                         </select>
                     </div>
+
                     {/* Brand Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Brand</label>
@@ -108,10 +124,13 @@ export const Listings = () => {
                             <option value="essx">ESSX</option>
                             <option value="spirit">UCS Spirit</option>
                             <option value="pacer">Pacer</option>
+                            <option value="skypole">Skypole</option>
+                            <option value="dynasty">Dynasty</option>
                             <option value="nordic">Nordic</option>
                             <option value="altius">Altius</option>
                         </select>
                     </div>
+
                     {/* Length Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Length</label>
@@ -127,6 +146,7 @@ export const Listings = () => {
                             })}
                         </select>
                     </div>
+
                     {/* Weight Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Weight (lbs)</label>
@@ -142,6 +162,7 @@ export const Listings = () => {
                             })}
                         </select>
                     </div>
+
                     {/* Price Range */}
                     <div className="space-y-2">
                         <label className="font-medium">Price Range</label>
@@ -164,6 +185,7 @@ export const Listings = () => {
                             />
                         </div>
                     </div>
+
                     {/* Condition (Checkboxes) */}
                     <div className="space-y-2">
                         <label className="font-medium">Condition</label>
@@ -197,7 +219,13 @@ export const Listings = () => {
             <div className="flex-1 overflow-hidden">
                 {/* Top Bar */}
                 <div className="border-b border-gray-200 p-4 flex justify-between items-center">
-                    <select className="rounded-lg border border-gray-300 px-4 py-2">
+                    <select 
+                        value={sortOption} 
+                        onChange={(e) => {
+                            setSortOption(e.target.value);
+                        }} 
+                        className="rounded-lg border border-gray-300 px-4 py-2"
+                    >
                         <option value="recent">Most Recent</option>
                         <option value="price_low">Price: Low to High</option>
                         <option value="price_high">Price: High to Low</option>
@@ -215,7 +243,6 @@ export const Listings = () => {
                         </button>
                     </div>
                 </div>
-
                 {/* Grid View */}
                 <div className="p-4 overflow-y-auto h-[calc(100%-4rem)]">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
@@ -223,6 +250,7 @@ export const Listings = () => {
                             <PoleCard
                                 key={listing.id}
                                 id={listing.id}
+                                title={listing.title}
                                 brand={listing.brand}
                                 length={listing.length}
                                 weight={listing.weight}

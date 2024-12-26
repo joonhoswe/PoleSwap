@@ -1,13 +1,15 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from .models import Object
 from .serializers import ObjectSerializer
 from .utils import upload_to_s3
 import os
 
-# get
+# post
 @api_view(['POST'])
 def createObject(request):
     # 1) Pull the raw files
@@ -31,6 +33,8 @@ def createObject(request):
     weight = request.data.get('weight')
     condition = request.data.get('condition')
     price = request.data.get('price')
+    title = request.data.get('title')
+    description = request.data.get('description')
     owner = request.data.get('owner')
     
     # 3) Build a plain dictionary including image_urls
@@ -40,6 +44,8 @@ def createObject(request):
         'weight': weight,
         'condition': condition,
         'price': price,
+        'title': title,
+        'description': description,
         'image_urls': image_urls,
         'owner': owner,
     }
@@ -63,6 +69,13 @@ def getObjects(request):
         serializer = ObjectSerializer(Objects, many=True)
         #return the serialized Objects
         return Response(serializer.data)
+    
+# retrieve just one listing
+@api_view(['GET'])
+def getObjectById(request, id):
+    obj = get_object_or_404(Object, id=id)
+    serializer = ObjectSerializer(obj)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # delete 
 @api_view(['DELETE'])
