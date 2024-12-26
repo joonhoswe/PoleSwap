@@ -85,10 +85,12 @@ export const Listings = () => {
 
     return (
         <div className="flex flex-col md:flex-row w-full min-h-[calc(100vh-5rem)]">
+            
             {/* Left Sidebar - Filters */}
             <div className="w-full md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
+
                     {/* Zip Code */}
                     <div className="space-y-2">
                         <label className="font-medium">Zip Code</label>
@@ -101,6 +103,7 @@ export const Listings = () => {
                             className="w-full rounded-lg border border-gray-300 px-4 py-2"
                         />
                     </div>
+
                     {/* Distance Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Distance</label>
@@ -112,6 +115,7 @@ export const Listings = () => {
                             <option value="100">Within 100 miles</option>
                         </select>
                     </div>
+
                     {/* Brand Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Brand</label>
@@ -126,6 +130,7 @@ export const Listings = () => {
                             <option value="altius">Altius</option>
                         </select>
                     </div>
+
                     {/* Length Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Length</label>
@@ -141,6 +146,7 @@ export const Listings = () => {
                             })}
                         </select>
                     </div>
+
                     {/* Weight Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">Weight (lbs)</label>
@@ -156,6 +162,7 @@ export const Listings = () => {
                             })}
                         </select>
                     </div>
+
                     {/* Price Range */}
                     <div className="space-y-2">
                         <label className="font-medium">Price Range</label>
@@ -178,6 +185,7 @@ export const Listings = () => {
                             />
                         </div>
                     </div>
+
                     {/* Condition (Checkboxes) */}
                     <div className="space-y-2">
                         <label className="font-medium">Condition</label>

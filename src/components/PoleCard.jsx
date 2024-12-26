@@ -43,19 +43,19 @@ export const PoleCard = ({
       </div>
       {/* Tags */}
       <div className="mb-2 flex flex-wrap gap-2">
-        <span className="inline-block rounded-full bg-indigo-100 text-indigo-600 text-xs font-semibold px-2 py-1">
-          {brand}
-        </span>
-        <span className="inline-block rounded-full bg-green-100 text-green-600 text-xs font-semibold px-2 py-1">
-          {feet}'{inches}"
-        </span>
-        <span className="inline-block rounded-full bg-pink-100 text-pink-600 text-xs font-semibold px-2 py-1">
-          {weight} lbs
-        </span>
         <span
           className={`inline-block rounded-full text-xs font-semibold px-2 py-1 ${conditionStyles}`}
         >
           {condition.toLowerCase() === "new" ? "New" : "Used"}
+        </span>
+        <span className="inline-block rounded-full bg-pink-100 text-pink-600 text-xs font-semibold px-2 py-1">
+          {brand}
+        </span>
+        <span className="inline-block rounded-full bg-orange-100 text-orange-600 text-xs font-semibold px-2 py-1">
+          {feet}'{inches}"
+        </span>
+        <span className="inline-block rounded-full bg-indigo-100 text-indigo-600 text-xs font-semibold px-2 py-1">
+          {weight} lbs
         </span>
       </div>
 
