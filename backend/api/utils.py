@@ -3,9 +3,6 @@ from botocore.exceptions import NoCredentialsError, ClientError
 import os
 
 def upload_to_s3(file, bucket_name, object_name=None):
-    print("AWS Access Key:", os.environ.get('AWS_ACCESS_KEY'))  # Debugging line
-    print("AWS Secret Key:", os.environ.get('AWS_SECRET_ACCESS_KEY'))  # Debugging line
-    print("Bucket Name:", bucket_name)  # Debugging line
     s3_client = boto3.client(
         's3',
         aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'),

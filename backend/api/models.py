@@ -1,5 +1,6 @@
 from django.db import models
-# from django.contrib.postgres.fields import ArrayField
+from datetime import datetime
+from django.utils import timezone
 
 class Object(models.Model):
     brand = models.CharField(max_length=50, default='not specified')
@@ -11,6 +12,7 @@ class Object(models.Model):
     description = models.CharField(max_length=500, default='not specified')
     image_urls = models.JSONField(default=list)
     owner = models.CharField(max_length=50, default='admin')
+    date_time_posted = models.DateTimeField(default = timezone.now, blank=True)
 
     def __str__(self):
         return f"{self.brand} {self.length}' - ${self.price}"

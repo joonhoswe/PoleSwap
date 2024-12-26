@@ -10,8 +10,8 @@ export const Home = () => {
                     Gear Up For Your Next <span className="text-blue-500">PR</span>
                 </h1>
                 <p className="mb-8 text-xl text-gray-600 max-w-2xl">
-                    The first marketplace dedicated to connecting pole vaulters. <br/>
-                    Buy and sell poles with confidence in your local area.
+                    The first marketplace dedicated to pole vault poles. <br/>
+                    Buy and sell with confidence in your local area.
                 </p>
                 <div className="flex gap-4">
                     <Link 
