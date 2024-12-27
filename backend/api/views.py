@@ -30,6 +30,7 @@ def createObject(request):
     # 2) Manually extract fields from request.data
     brand = request.data.get('brand')
     length = request.data.get('length')
+    flex = request.data.get('flex')
     weight = request.data.get('weight')
     condition = request.data.get('condition')
     price = request.data.get('price')
@@ -41,6 +42,7 @@ def createObject(request):
     serializer_data = {
         'brand': brand,
         'length': length,
+        'flex': flex,
         'weight': weight,
         'condition': condition,
         'price': price,

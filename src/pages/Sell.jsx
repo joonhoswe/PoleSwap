@@ -7,9 +7,6 @@ import ConfettiExplosion from "react-confetti-explosion";
 export const Sell = () => {
   const { isSignedIn, user } = useUser();
   let email = "";
-  if (isSignedIn) {
-    email = user?.primaryEmailAddress?.emailAddress ?? "";
-  }
 
   const [formData, setFormData] = useState({
     title: "",
@@ -22,10 +19,20 @@ export const Sell = () => {
     lengthInches: "",
     weight: "",
     weightCustom: "",
+    flex: "",
     description: "",
     images: [],
     owner: email,
   });
+
+  useEffect(() => {
+    if (isSignedIn && user?.primaryEmailAddress?.emailAddress) {
+      setFormData(prev => ({
+        ...prev,
+        owner: user.primaryEmailAddress.emailAddress
+      }));
+    }
+  }, [isSignedIn, user]);
 
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,13 +54,19 @@ export const Sell = () => {
 
     // Handle length validation
     if (name === 'lengthFeet' || name === 'lengthInches') {
-      if (value < 0) return;
+      if (value <= 0) return;
     }
 
     // Handle weight validation
     if (name === 'weight' || name === 'weightCustom') {
-      if (value < 0) return;
+      if (value <= 0) return;
     }
+
+    // Handle flex validation
+    if (name === 'flex') {
+        const regex = /^\d{0,2}(\.\d{0,2})?$/;
+        if (!regex.test(value)) return;
+      }
 
     // Handle description length
     if (name === 'description' && value.length > MAX_DESCRIPTION_LENGTH) return;
@@ -82,6 +95,7 @@ export const Sell = () => {
         lengthInches,
         weight,
         weightCustom,
+        flex,
         description,
       } = formData;
       if (
@@ -90,7 +104,7 @@ export const Sell = () => {
         !price ||
         (!brand && !brandCustom) ||
         (!length && !lengthFeet && !lengthInches) ||
-        (!weight && !weightCustom) ||
+        (!weight && !weightCustom) || !flex ||
         !description
       ) {
         setError("Please fill in all required fields.");
@@ -112,12 +126,14 @@ export const Sell = () => {
       const parsedPrice = parseFloat(price);
       const parsedWeight = parseInt(finalWeight, 10);
       const parsedLength = parseFloat(finalLength);
+      const parsedFlex = parseFloat(flex)
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("condition", condition);
       formDataToSend.append("price", parsedPrice);
       formDataToSend.append("brand", finalBrand);
       formDataToSend.append("weight", parsedWeight);
+      formDataToSend.append("flex", parsedFlex);
       formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
       formDataToSend.append("owner", formData.owner);
@@ -247,7 +263,7 @@ export const Sell = () => {
               />
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Length (ft) <span className="text-red-500">*</span>
@@ -322,6 +338,21 @@ export const Sell = () => {
                   className="mt-2 w-full rounded border border-gray-300 px-2 py-2 focus:border-blue-500 focus:outline-none"
                 />
               )}
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Flex <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="flex"
+                value={formData.flex}
+                onChange={handleChange}
+                placeholder="Enter flex"
+                min="0"
+                step="0.01"
+                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              />
             </div>
           </div>
           <div>
