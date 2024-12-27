@@ -33,7 +33,6 @@ export const Sell = () => {
   const [listingId, setListingId] = useState(null);
 
   const MAX_DESCRIPTION_LENGTH = 500;
-  const MAX_PRICE_LENGTH = 10;
   const remainingChars = MAX_DESCRIPTION_LENGTH - formData.description.length;
 
   const handleChange = (e) => {
