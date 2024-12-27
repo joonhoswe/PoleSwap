@@ -33,10 +33,9 @@ export const Dashboard = () => {
         setMyListings(filteredMyListings);
 
         // 3) Fetch "Saved" listings (same as before)
-        const savedListingsResponse = await fetch(
-          `http://127.0.0.1:8000/api/listings/saved/${userEmail}`
-        );
-        const savedListingsData = await savedListingsResponse.json();
+        const savedListingsData = allData.filter(
+            (listing) => listing.saved.includes(userEmail)
+        )
         setSavedListings(savedListingsData);
       } catch (error) {
         console.error("Error fetching listings:", error);
