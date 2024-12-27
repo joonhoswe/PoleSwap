@@ -123,7 +123,7 @@ export const CurrentListing = () => {
   const isUserSaved = listing.saved?.includes(userEmail);
 
   return (
-    <div className="w-full min-h-screen px-4 py-8 bg-gray-50">
+    <div className="w-full min-h-screen px-4 py-8">
       <div className="bg-white rounded-xl shadow-md">
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-2/3 p-6">
