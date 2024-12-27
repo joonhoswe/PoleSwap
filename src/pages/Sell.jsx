@@ -40,7 +40,7 @@ export const Sell = () => {
     
     // Handle price validation
     if (name === 'price') {
-      // Only allow numbers with up to 2 decimal places and max 10 digits
+      // Only allow numbers with up to 2 decimal places and max 7 digits
       const regex = /^\d{0,7}(\.\d{0,2})?$/;
       if (!regex.test(value)) return;
     }
@@ -159,7 +159,7 @@ export const Sell = () => {
 
   return !posted ? (
     <div className="h-screen w-full bg-white px-4 py-4">
-      <div className="mx-auto w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
+      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
           <p className="text-gray-600">Provide details and images of your pole</p>
