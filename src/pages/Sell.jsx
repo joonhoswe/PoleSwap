@@ -10,6 +10,7 @@ export const Sell = () => {
   if (isSignedIn) {
     email = user?.primaryEmailAddress?.emailAddress ?? "";
   }
+
   const [formData, setFormData] = useState({
     title: "",
     condition: "",
@@ -25,14 +26,39 @@ export const Sell = () => {
     images: [],
     owner: email,
   });
+
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [posted, setPosted] = useState(false);
   const [listingId, setListingId] = useState(null);
 
+  const MAX_DESCRIPTION_LENGTH = 500;
+  const remainingChars = MAX_DESCRIPTION_LENGTH - formData.description.length;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Handle price validation
+    if (name === 'price') {
+      // Only allow numbers with up to 2 decimal places and max 7 digits
+      const regex = /^\d{0,7}(\.\d{0,2})?$/;
+      if (!regex.test(value)) return;
+    }
+
+    // Handle length validation
+    if (name === 'lengthFeet' || name === 'lengthInches') {
+      if (value < 0) return;
+    }
+
+    // Handle weight validation
+    if (name === 'weight' || name === 'weightCustom') {
+      if (value < 0) return;
+    }
+
+    // Handle description length
+    if (name === 'description' && value.length > MAX_DESCRIPTION_LENGTH) return;
+
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -133,7 +159,7 @@ export const Sell = () => {
 
   return !posted ? (
     <div className="h-screen w-full bg-white px-4 py-4">
-      <div className="mx-auto w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
+      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
           <p className="text-gray-600">Provide details and images of your pole</p>
@@ -182,8 +208,13 @@ export const Sell = () => {
               value={formData.price}
               onChange={handleChange}
               placeholder="Enter price"
+              min="0"
+              step="0.01"
               className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Maximum price: $9,999,999.99
+            </p>
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -294,16 +325,20 @@ export const Sell = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Description <span className="text-red-500">*</span>
+            <label className="block text-sm font-semibold text-gray-700">
+                Description <span className="text-red-500">*</span>
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter a detailed description..."
+              maxLength={MAX_DESCRIPTION_LENGTH}
               className="w-full h-28 resize-none rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
             />
+            <span className={`text-xs ${remainingChars < 50 ? 'text-orange-500' : 'text-gray-500'}`}>
+                {remainingChars} characters remaining
+            </span>
           </div>
           <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">
