@@ -40,6 +40,10 @@ export const Navbar = () => {
                         My Listings
                     </Link>
 
+                    <Link to={RoutePaths.DASHBOARD} className="hover:text-blue-500">
+                        Dashboard
+                    </Link>
+
                     <UserButton />
                 </SignedIn>
             </div>
