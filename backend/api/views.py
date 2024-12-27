@@ -85,17 +85,35 @@ def deleteObject(request, id):
         Object.delete()
         return Response({'message': 'Object deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-# patch
 @api_view(['PATCH'])
 def updateObject(request):
     if request.method == 'PATCH':
-        id = request.data.get('id')
+        listing_id = request.data.get('id')
+        email = request.data.get('email')
+        remove = request.data.get('remove')  # boolean indicating whether to remove or add
 
-        if not id:
-            return Response({'error': 'ID required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        Object = get_object_or_404(Object, id=id)
+        # Validate input
+        if not listing_id or not email or remove is None:
+            return Response({'error': 'id, email, and remove flag required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        Object.save()
+        obj = get_object_or_404(Object, id=listing_id)
+        saved_list = obj.saved or []  # assume 'saved' is a JSONField defaulting to []
 
-        return Response({'message': 'Successfully updated'}, status=status.HTTP_200_OK)
+        # If remove==true => remove email
+        if remove:
+            if email in saved_list:
+                saved_list.remove(email)
+                obj.saved = saved_list
+                obj.save()
+
+        # If remove==false => add email
+        else:
+            if email not in saved_list:
+                saved_list.append(email)
+                obj.saved = saved_list
+                obj.save()
+
+        return Response({
+            'message': 'Successfully updated',
+            'saved': obj.saved  # Return the updated list
+        }, status=status.HTTP_200_OK)

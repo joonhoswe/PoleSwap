@@ -13,6 +13,7 @@ class Object(models.Model):
     image_urls = models.JSONField(default=list)
     owner = models.CharField(max_length=50, default='admin')
     date_time_posted = models.DateTimeField(default = timezone.now, blank=True)
+    saved = models.JSONField(default=list, blank=True)
 
     def __str__(self):
         return f"{self.brand} {self.length}' - ${self.price}"

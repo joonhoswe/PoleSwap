@@ -36,8 +36,12 @@ export const Navbar = () => {
                 </SignedOut>
 
                 <SignedIn>
-                    <Link to={RoutePaths.MY_LISTINGS} className="hover:text-blue-500">
+                    {/* <Link to={RoutePaths.MY_LISTINGS} className="hover:text-blue-500">
                         My Listings
+                    </Link> */}
+
+                    <Link to={RoutePaths.DASHBOARD} className="hover:text-blue-500">
+                        Dashboard
                     </Link>
 
                     <UserButton />
