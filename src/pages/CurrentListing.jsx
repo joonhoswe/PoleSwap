@@ -116,11 +116,16 @@ export const CurrentListing = () => {
       setShowSignInModal(true);
       return;
     }
-    alert("Contact logic goes here!");
+    alert("Please contact owner at: " + listing.owner);
   };
 
   // Check if user is in "saved"
   const isUserSaved = listing.saved?.includes(userEmail);
+
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return ""; 
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   return (
     <div className="w-full min-h-screen px-4 py-8">
@@ -197,8 +202,8 @@ export const CurrentListing = () => {
               </p>
               <div className="space-y-4 mb-6">
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Weight</span>
-                  <span className="font-medium">{listing.weight} lbs</span>
+                  <span className="text-gray-600">Condition</span>
+                  <span className="font-medium">{capitalizeFirstLetter(listing.condition)}</span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-600">Length</span>
@@ -209,8 +214,12 @@ export const CurrentListing = () => {
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Condition</span>
-                  <span className="font-medium">{listing.condition}</span>
+                  <span className="text-gray-600">Weight</span>
+                  <span className="font-medium">{listing.weight} lbs</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-600">Flex</span>
+                  <span className="font-medium">{listing.flex}</span>
                 </div>
               </div>
               <div className="mb-6">

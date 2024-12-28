@@ -178,7 +178,7 @@ export const Sell = () => {
       <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
-          <p className="text-gray-600">Provide details and images of your pole</p>
+          <p className="text-gray-600">Please provide details and images of your pole</p>
         </div>
         {error && (
           <div className="mb-4 w-full rounded-lg bg-red-50 p-4 text-red-600">
@@ -199,7 +199,26 @@ export const Sell = () => {
               className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
             />
           </div>
-          <div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Price ($) <span className="text-red-500">*</span>
+                </label>
+                <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Enter price"
+                min="0"
+                step="0.01"
+                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                Maximum price: $9,999,999.99
+                </p>
+            </div>
+            <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Condition <span className="text-red-500">*</span>
             </label>
@@ -213,25 +232,9 @@ export const Sell = () => {
               <option value="new">New</option>
               <option value="used">Used</option>
             </select>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Price ($) <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Enter price"
-              min="0"
-              step="0.01"
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Maximum price: $9,999,999.99
-            </p>
-          </div>
+         
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Brand <span className="text-red-500">*</span>
