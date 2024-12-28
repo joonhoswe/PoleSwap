@@ -119,3 +119,14 @@ def updateObject(request):
             'message': 'Successfully updated',
             'saved': obj.saved  # Return the updated list
         }, status=status.HTTP_200_OK)
+
+# edit details of object 
+@api_view(['PATCH'])
+def editObject(request, id):
+    obj = get_object_or_404(Object, id=id)
+    serializer = ObjectSerializer(obj, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save() 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

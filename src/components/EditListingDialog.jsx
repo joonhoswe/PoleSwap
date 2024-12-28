@@ -162,9 +162,7 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
                 >
                   <option value="">Select condition</option>
                   <option value="new">New</option>
-                  <option value="like new">Like New</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
+                  <option value="used">Used</option>
                 </select>
               </div>
 
