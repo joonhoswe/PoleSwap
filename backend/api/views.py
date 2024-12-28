@@ -82,9 +82,9 @@ def getObjectById(request, id):
 # delete 
 @api_view(['DELETE'])
 def deleteObject(request, id):
-    Object = get_object_or_404(Object, id=id)
+    obj = get_object_or_404(Object, id=id)
     if request.method == 'DELETE':
-        Object.delete()
+        obj.delete()
         return Response({'message': 'Object deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['PATCH'])
