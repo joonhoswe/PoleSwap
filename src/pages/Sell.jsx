@@ -178,7 +178,7 @@ export const Sell = () => {
       <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
-          <p className="text-gray-600">Provide details and images of your pole</p>
+          <p className="text-gray-600">Please provide details and images of your pole</p>
         </div>
         {error && (
           <div className="mb-4 w-full rounded-lg bg-red-50 p-4 text-red-600">
@@ -212,7 +212,7 @@ export const Sell = () => {
                 placeholder="Enter price"
                 min="0"
                 step="0.01"
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                 Maximum price: $9,999,999.99
