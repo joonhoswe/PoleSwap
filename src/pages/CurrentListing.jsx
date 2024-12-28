@@ -116,7 +116,7 @@ export const CurrentListing = () => {
       setShowSignInModal(true);
       return;
     }
-    alert("Contact logic goes here!");
+    alert("Please contact owner at: " + listing.owner);
   };
 
   // Check if user is in "saved"
