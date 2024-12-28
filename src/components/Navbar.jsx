@@ -43,8 +43,8 @@ export const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8 flex-1 justify-center">
+        {/* Desktop Navigation (Moved from 'flex-1 justify-center' to 'ml-auto') */}
+        <div className="hidden md:flex items-center gap-8 ml-auto">
           <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
             Browse
           </Link>
@@ -59,7 +59,7 @@ export const Navbar = () => {
         </div>
 
         {/* Right Side Controls */}
-        <div className="flex items-center gap-2">
+        <div className="pl-6 flex items-center gap-2">
           <SignedOut>
             <SignInButton className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors">
               Sign In
@@ -85,7 +85,7 @@ export const Navbar = () => {
           ${isOpen ? 'max-h-[200px] py-4' : 'max-h-0 py-0'}
         `}
       >
-        <div className="flex flex-col space-y-4 px-4">
+        <div className="flex flex-col space-y-4 px-8">
           <Link
             to={RoutePaths.LISTINGS}
             className="hover:text-blue-500 transition-colors"

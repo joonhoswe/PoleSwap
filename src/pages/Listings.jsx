@@ -124,7 +124,7 @@ export const Listings = () => {
     return (
         <div className="flex flex-col md:flex-row w-full min-h-[calc(100vh-5rem)]">
             {/* Left Sidebar - Filters */}
-            <div className="w-full hidden md:visible md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
+            <div className="w-full hidden md:block md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
                     {/* Zip Code */}
