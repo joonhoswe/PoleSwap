@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { PoleCard } from "../components/PoleCard";
+import MobileFilterMenu from "../components/MobileFilterMenu";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -21,6 +22,7 @@ export const Listings = () => {
         conditionNew: false,
         conditionUsed: false,
     });
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
     // Memoized fetch function
     const fetchListings = useCallback(async () => {
@@ -122,7 +124,7 @@ export const Listings = () => {
     return (
         <div className="flex flex-col md:flex-row w-full min-h-[calc(100vh-5rem)]">
             {/* Left Sidebar - Filters */}
-            <div className="w-full md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
+            <div className="w-full hidden md:block md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
                     {/* Zip Code */}
@@ -283,7 +285,14 @@ export const Listings = () => {
                         <option value="price_high">Price: High to Low</option>
                     </select>
 
-                    <div className="flex gap-2">
+                    <button
+                    onClick={() => setIsMobileFilterOpen(true)}
+                    className="md:hidden px-4 py-2 border rounded-lg"
+                    >
+                    Filters
+                    </button>
+
+                    {/* <div className="flex gap-2">
                         <button
                             onClick={() => setViewMode("grid")}
                             className={`p-2 rounded-lg ${viewMode === "grid" ? "bg-blue-50 text-blue-500" : "text-gray-500"}`}
@@ -292,7 +301,7 @@ export const Listings = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Loader */}
@@ -346,6 +355,13 @@ export const Listings = () => {
                     </>
                 )}
             </div>
+
+<MobileFilterMenu
+  filters={filters}
+  handleFilterChange={handleFilterChange}
+  isOpen={isMobileFilterOpen}
+  onClose={() => setIsMobileFilterOpen(false)}
+/>
         </div>
     );
 };
