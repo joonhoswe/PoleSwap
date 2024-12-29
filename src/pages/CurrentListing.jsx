@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { ChevronLeft, ChevronRight, MessageCircle, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, MessageCircle, Heart, Pencil } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
+import { EditButton } from "../components/EditListingDialog";
 
 export const CurrentListing = () => {
   const { id } = useParams();
@@ -14,7 +15,6 @@ export const CurrentListing = () => {
   const { user, isSignedIn } = useUser();
   const userEmail = user?.emailAddresses?.[0]?.emailAddress;
 
-  // Controls the sign-in popup
   const [showSignInModal, setShowSignInModal] = useState(false);
 
   useEffect(() => {
@@ -57,9 +57,6 @@ export const CurrentListing = () => {
     );
   }
 
-  const feet = Math.floor(listing.length);
-  const inches = Math.round((listing.length - feet) * 12);
-
   const handlePrevImage = () => {
     setSelectedImageIndex((prev) =>
       prev === 0 ? listing.image_urls.length - 1 : prev - 1
@@ -72,14 +69,12 @@ export const CurrentListing = () => {
     );
   };
 
-  // If not signed in => show popup; else do PATCH call to save/unsave
   const handleToggleSave = async () => {
     if (!isSignedIn || !userEmail) {
       setShowSignInModal(true);
       return;
     }
 
-    // Check if already saved
     const isSaved = listing.saved?.includes(userEmail);
     try {
       const response = await fetch("http://127.0.0.1:8000/api/patch/", {
@@ -90,7 +85,7 @@ export const CurrentListing = () => {
         body: JSON.stringify({
           id: listing.id,
           email: userEmail,
-          remove: isSaved, // If already saved, request unsave
+          remove: isSaved,
         }),
       });
 
@@ -98,11 +93,7 @@ export const CurrentListing = () => {
         throw new Error(isSaved ? "Failed to unsave listing." : "Failed to save listing.");
       }
 
-      // data.saved should be the updated array
       const data = await response.json();
-      console.log("Listing saved array updated:", data.saved);
-
-      // Update local listing with the new saved array
       setListing((prev) => ({ ...prev, saved: data.saved }));
     } catch (err) {
       console.error("Error toggling save:", err);
@@ -110,7 +101,6 @@ export const CurrentListing = () => {
     }
   };
 
-  // If not signed in => show popup; else open chat or something
   const handleContact = () => {
     if (!isSignedIn || !userEmail) {
       setShowSignInModal(true);
@@ -119,11 +109,11 @@ export const CurrentListing = () => {
     alert("Please contact owner at: " + listing.owner);
   };
 
-  // Check if user is in "saved"
   const isUserSaved = listing.saved?.includes(userEmail);
+  const isOwner = userEmail === listing.owner;
 
   const capitalizeFirstLetter = (string) => {
-    if (!string) return ""; 
+    if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
@@ -209,8 +199,7 @@ export const CurrentListing = () => {
                   <span className="text-gray-600">Length</span>
                   <span className="font-medium">
                     {Math.floor(listing.length)}'
-                    {Math.round((listing.length - Math.floor(listing.length)) * 12)}
-                    "
+                    {Math.round((listing.length - Math.floor(listing.length)) * 12)}"
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
@@ -228,26 +217,35 @@ export const CurrentListing = () => {
                   {listing.description || "No description available."}
                 </p>
               </div>
-              <div className="flex flex-row space-x-3">
-                <button
-                  onClick={handleToggleSave}
-                  className={`w-1/2 px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors duration-300 ease-in-out ${
-                    isUserSaved
-                      ? "bg-red-500 hover:bg-red-600 text-white"
-                      : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                  }`}
-                  title={isUserSaved ? "Unsave" : "Save"}
-                >
-                  <Heart className="w-5 h-5" />
-                  {isUserSaved ? "Unsave" : "Save"}
-                </button>
-                <button
-                  onClick={handleContact}
-                  className="w-1/2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors duration-300 ease-in-out"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  Contact
-                </button>
+              <div className="flex">
+                {isOwner ? (
+                  <EditButton 
+                    listing={listing}
+                    onListingUpdate={(updatedListing) => setListing(updatedListing)}
+                  />
+                ) : (
+                  <>
+                    <button
+                      onClick={handleToggleSave}
+                      className={`flex-1 px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors duration-300 ease-in-out ${
+                        isUserSaved
+                          ? "bg-red-500 hover:bg-red-600 text-white"
+                          : "bg-gray-50 hover:bg-gray-100 text-gray-700"
+                      }`}
+                      title={isUserSaved ? "Unsave" : "Save"}
+                    >
+                      <Heart className="w-5 h-5" />
+                      {isUserSaved ? "Unsave" : "Save"}
+                    </button>
+                    <button
+                      onClick={handleContact}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors duration-300 ease-in-out"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Contact
+                    </button> 
+                  </>
+                )}
               </div>
             </div>
           </div>
