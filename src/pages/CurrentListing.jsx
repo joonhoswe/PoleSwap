@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MessageCircle, Heart, Pencil } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
 import { EditButton } from "../components/EditListingDialog";
+import { useNavigate } from "react-router-dom";
+import { RoutePaths } from "../general/RoutePaths";
 
 export const CurrentListing = () => {
   const { id } = useParams();
@@ -11,6 +13,7 @@ export const CurrentListing = () => {
   const [error, setError] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const navigate = useNavigate();
 
   const { user, isSignedIn } = useUser();
   const userEmail = user?.emailAddresses?.[0]?.emailAddress;
@@ -119,6 +122,13 @@ export const CurrentListing = () => {
 
   return (
     <div className="w-full min-h-screen px-4 py-8">
+       <button
+        onClick={() => navigate(RoutePaths.LISTINGS)}
+        className="mb-6 flex items-center gap-2 text-gray-600 hover:text-blue-500 transition-colors duration-200"
+      >
+        <ChevronLeft className="w-5 h-5" />
+        <span>Back to Listings</span>
+      </button>
       <div className="bg-white rounded-xl shadow-md">
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-2/3 p-6">
@@ -258,7 +268,7 @@ export const CurrentListing = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
             <h2 className="text-xl font-bold mb-4">Sign In Required</h2>
             <p className="text-gray-600 mb-6">
-              You must be signed in to save or contact the seller.
+              You must be signed in to save this listing or contact the seller.
             </p>
             <button
               onClick={() => setShowSignInModal(false)}
