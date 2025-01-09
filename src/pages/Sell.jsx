@@ -23,7 +23,19 @@ export const Sell = () => {
     description: "",
     images: [],
     owner: email,
+    state: "",
+    city: ""
   });
+  const states = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+    "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+    "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+    "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+    "Wisconsin", "Wyoming"
+  ];
 
   useEffect(() => {
     if (isSignedIn && user?.primaryEmailAddress?.emailAddress) {
@@ -41,6 +53,10 @@ export const Sell = () => {
 
   const MAX_DESCRIPTION_LENGTH = 500;
   const remainingChars = MAX_DESCRIPTION_LENGTH - formData.description.length;
+
+  function capitalizeFirstLetter(val) {
+    return val.split(" ").map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(" ");
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,6 +113,8 @@ export const Sell = () => {
         weightCustom,
         flex,
         description,
+        state,
+        city
       } = formData;
       if (
         !title ||
@@ -105,7 +123,7 @@ export const Sell = () => {
         (!brand && !brandCustom) ||
         (!length && !lengthFeet && !lengthInches) ||
         (!weight && !weightCustom) || !flex ||
-        !description
+        !description || !state || !city
       ) {
         setError("Please fill in all required fields.");
         return;
@@ -123,6 +141,8 @@ export const Sell = () => {
         const inches = parseFloat(lengthInches || "0") / 12;
         finalLength = feet + inches;
       }
+      const formattedState = capitalizeFirstLetter(state);
+      const formattedCity = capitalizeFirstLetter(city);
       const parsedPrice = parseFloat(price);
       const parsedWeight = parseInt(finalWeight, 10);
       const parsedLength = parseFloat(finalLength);
@@ -137,6 +157,9 @@ export const Sell = () => {
       formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
       formDataToSend.append("owner", formData.owner);
+      formDataToSend.append("state", formattedState);
+      formDataToSend.append("city", formattedCity);
+
       for (const image of formData.images) {
         formDataToSend.append("images", image);
       }
@@ -153,7 +176,15 @@ export const Sell = () => {
       setPosted(true);
 
     } catch (err) {
-      setError("Failed to create listing. Please try again.");
+      console.error('Error details:', err);
+      setError(err.message || "Failed to create listing. Please try again.");
+      
+      // If you have a response error
+      if (err.response) {
+        const errorMessage = await err.response.text();
+        console.error('Server response:', errorMessage);
+        setError(`Server error: ${errorMessage}`);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -201,6 +232,41 @@ export const Sell = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                State <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              >
+                <option value="">Select State</option>
+                {states.map(state => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                City <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Ex: Atlanta"
+                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Price ($) <span className="text-red-500">*</span>
                 </label>
@@ -219,19 +285,19 @@ export const Sell = () => {
                 </p>
             </div>
             <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Condition <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="condition"
-              value={formData.condition}
-              onChange={handleChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-            >
-              <option value="">Select Condition</option>
-              <option value="new">New</option>
-              <option value="used">Used</option>
-            </select>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Condition <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="condition"
+                value={formData.condition}
+                onChange={handleChange}
+                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              >
+                <option value="">Select Condition</option>
+                <option value="new">New</option>
+                <option value="used">Used</option>
+              </select>
             </div>
           </div>
          
