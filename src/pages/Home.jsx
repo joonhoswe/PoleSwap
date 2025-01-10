@@ -15,13 +15,13 @@ export const Home = () => {
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Link 
             to={RoutePaths.LISTINGS} 
-            className="flex items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
+            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
           >
             Browse Poles
           </Link>
           <Link 
             to={RoutePaths.SELL} 
-            className="flex items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
+            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
           >
             Sell Poles
           </Link>

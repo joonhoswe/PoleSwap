@@ -84,6 +84,8 @@ export const Dashboard = () => {
               condition={listing.condition}
               price={listing.price}
               imageUrls={listing.image_urls}
+              state={listing.state}
+              city={listing.city}
             />
           ))}
         </div>

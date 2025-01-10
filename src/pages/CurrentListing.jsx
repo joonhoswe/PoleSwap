@@ -194,12 +194,18 @@ export const CurrentListing = () => {
 
           <div className="lg:w-1/3 p-6 border-t lg:border-t-0 lg:border-l border-gray-100">
             <div className="sticky top-6">
+
+              {/* Title */}
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 {listing.title}
               </h1>
-              <p className="text-3xl font-bold text-blue-600 mb-6">
+
+              {/* Location */}
+              <p className="text-3xl font-bold text-blue-600 mb-2">
                 ${listing.price}
               </p>
+
+              <p className="text-gray-500 mb-6">{listing.city}, {listing.state}</p>
               <div className="space-y-4 mb-6">
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
                   <span className="text-gray-600">Condition</span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
-const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose }) => {
+const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states }) => {
   return (
     <>
       {/* Overlay */}
@@ -27,34 +27,36 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose }) => {
 
         {/* Filter Content */}
         <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-          {/* Zip Code */}
+          {/* State */}
           <div>
-            <label className="block font-medium mb-1">Zip Code</label>
-            <input
-              type="text"
-              name="zipCode"
-              placeholder="Enter zip code"
-              value={filters.zipCode}
-              onChange={handleFilterChange}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            />
+            <label className="font-medium">State</label>
+            <select 
+                name="state" 
+                onChange={handleFilterChange} 
+                value={filters.state}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+            >
+                <option value="">Nationwide</option>
+                {states.map(state => (
+                <option key={state} value={state}>
+                    {state}
+                </option>
+                ))}
+            </select>
           </div>
 
-          {/* Distance */}
+          {/* City */}
           <div>
-            <label className="block font-medium mb-1">Distance</label>
-            <select 
-              name="distance" 
-              onChange={handleFilterChange} 
-              value={filters.distance}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
+            <label className="font-medium">City</label>
+            <input 
+                type="text"
+                name="city" 
+                placeholder="Statewide"
+                onChange={handleFilterChange} 
+                value={filters.city}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
             >
-              <option value="">Nationwide</option>
-              <option value="10">Within 10 miles</option>
-              <option value="25">Within 25 miles</option>
-              <option value="50">Within 50 miles</option>
-              <option value="100">Within 100 miles</option>
-            </select>
+            </input>
           </div>
 
           {/* Brand */}

@@ -10,7 +10,9 @@ export const PoleCard = ({
   weight, 
   condition, 
   price, 
-  imageUrls 
+  imageUrls,
+  state,
+  city
 }) => {
   const feet = Math.floor(length);
   const inches = Math.round((length - feet) * 12);
@@ -60,10 +62,16 @@ export const PoleCard = ({
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-bold text-gray-800 mb-1">{title}</h3>
+      <h3 className="text-lg font-bold text-gray-800">{title}</h3>
         
       {/* Price */}
       <p className="font-bold text-blue-500">${price}</p>
+
+
+      {/* Location */}
+      <p className="text-gray-500 text-sm">{city}, {state}</p>
+
+
     </Link>
   );
 };

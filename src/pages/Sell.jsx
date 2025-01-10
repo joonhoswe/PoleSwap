@@ -206,9 +206,9 @@ export const Sell = () => {
 
   return !posted ? (
     <div className="h-screen w-full bg-white px-4 py-4">
-      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
+      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
         <div className="mb-6 text-center">
-          <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
+          <h1 className="mb-2 text-2xl font-extrabold text-gray-800">Sell Your Pole</h1>
           <p className="text-gray-600">Please provide details and images of your pole</p>
         </div>
         {error && (
@@ -216,7 +216,7 @@ export const Sell = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Title <span className="text-red-500">*</span>
@@ -227,10 +227,10 @@ export const Sell = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="Short, catchy title"
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 State <span className="text-red-500">*</span>
@@ -240,13 +240,11 @@ export const Sell = () => {
                 value={formData.state}
                 onChange={handleChange}
                 required
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select State</option>
                 {states.map(state => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
+                  <option key={state} value={state}>{state}</option>
                 ))}
               </select>
             </div>
@@ -261,11 +259,11 @@ export const Sell = () => {
                 value={formData.city}
                 onChange={handleChange}
                 placeholder="Ex: Atlanta"
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Price ($) <span className="text-red-500">*</span>
@@ -278,7 +276,7 @@ export const Sell = () => {
                 placeholder="Enter price"
                 min="0"
                 step="0.01"
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                 Maximum price: $9,999,999.99
@@ -292,7 +290,7 @@ export const Sell = () => {
                 name="condition"
                 value={formData.condition}
                 onChange={handleChange}
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select Condition</option>
                 <option value="new">New</option>
@@ -309,7 +307,7 @@ export const Sell = () => {
               name="brand"
               value={formData.brand}
               onChange={handleChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
             >
               <option value="">Select Brand</option>
               <option value="essx">ESSX</option>
@@ -332,7 +330,7 @@ export const Sell = () => {
               />
             )}
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Length (ft) <span className="text-red-500">*</span>
@@ -341,7 +339,7 @@ export const Sell = () => {
                 name="length"
                 value={formData.length}
                 onChange={handleChange}
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select Length</option>
                 {[...Array(23)].map((_, i) => {
@@ -384,7 +382,7 @@ export const Sell = () => {
                 name="weight"
                 value={formData.weight}
                 onChange={handleChange}
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select Weight</option>
                 {[...Array(39)].map((_, i) => {
@@ -418,14 +416,12 @@ export const Sell = () => {
                 value={formData.flex}
                 onChange={handleChange}
                 placeholder="Enter flex"
-                min="0"
-                step="0.01"
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -434,7 +430,7 @@ export const Sell = () => {
               onChange={handleChange}
               placeholder="Enter a detailed description..."
               maxLength={MAX_DESCRIPTION_LENGTH}
-              className="w-full h-28 resize-none rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-32 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none resize-none"
             />
             <span className={`text-xs ${remainingChars < 50 ? 'text-orange-500' : 'text-gray-500'}`}>
                 {remainingChars} characters remaining
@@ -449,16 +445,17 @@ export const Sell = () => {
               accept="image/*"
               multiple
               onChange={handleImageChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 hover:file:bg-gray-200 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 py-2 file:mr-4 file:py-2 file:px-4 
+              file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 
+              hover:file:bg-gray-200 focus:outline-none"
             />
           </div>
           <p className="text-gray-500 pb-6"><span className="text-red-500">*</span> indicates a required field</p>
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`mt-2 w-full rounded bg-blue-500 px-4 py-2 font-semibold text-white transition ${
-              isSubmitting ? "cursor-not-allowed bg-blue-300" : "hover:bg-blue-600"
-            }`}
+            className={`w-full h-12 rounded-lg font-semibold text-white transition
+            ${isSubmitting ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
           >
             {isSubmitting ? "Creating Listing..." : "List Pole"}
           </button>
