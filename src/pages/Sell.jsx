@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
-import { RoutePaths } from "../general/RoutePaths";
-import ConfettiExplosion from "react-confetti-explosion";
+import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/clerk-react';
+import { Link } from 'react-router-dom';
+import { RoutePaths } from '../general/RoutePaths';
+import ConfettiExplosion from 'react-confetti-explosion';
+import TermsModal from '../components/TermsModal';
+import PrivacyModal from '../components/PrivacyModal';
 
 export const Sell = () => {
   const { isSignedIn, user } = useUser();
@@ -45,11 +47,13 @@ export const Sell = () => {
       }));
     }
   }, [isSignedIn, user]);
-
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [posted, setPosted] = useState(false);
   const [listingId, setListingId] = useState(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   const MAX_DESCRIPTION_LENGTH = 500;
   const remainingChars = MAX_DESCRIPTION_LENGTH - formData.description.length;
@@ -61,35 +65,33 @@ export const Sell = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Handle price validation
     if (name === 'price') {
-      // Only allow numbers with up to 2 decimal places and max 7 digits
       const regex = /^\d{0,7}(\.\d{0,2})?$/;
       if (!regex.test(value)) return;
     }
 
-    // Handle length validation
     if (name === 'lengthFeet' || name === 'lengthInches') {
       if (value <= 0) return;
     }
 
-    // Handle weight validation
     if (name === 'weight' || name === 'weightCustom') {
       if (value <= 0) return;
     }
 
-    // Handle flex validation
+    if (name === 'city') {
+      const regex = /^$|^[a-zA-Z]+$/;
+      if (!regex.test(value)) return;
+    }
+
     if (name === 'flex') {
         const regex = /^\d{0,2}(\.\d{0,2})?$/;
         if (!regex.test(value)) return;
       }
 
-    // Handle description length
     if (name === 'description' && value.length > MAX_DESCRIPTION_LENGTH) return;
 
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setFormData((prev) => ({ ...prev, images: files }));
@@ -179,7 +181,6 @@ export const Sell = () => {
       console.error('Error details:', err);
       setError(err.message || "Failed to create listing. Please try again.");
       
-      // If you have a response error
       if (err.response) {
         const errorMessage = await err.response.text();
         console.error('Server response:', errorMessage);
@@ -205,8 +206,8 @@ export const Sell = () => {
   }
 
   return !posted ? (
-    <div className="h-screen w-full bg-white px-4 py-4">
-      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+    <div className="flex-1 w-full bg-white px-4 py-4">
+      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 mb-8">
         <div className="mb-6 text-center">
           <h1 className="mb-2 text-2xl font-extrabold text-gray-800">Sell Your Pole</h1>
           <p className="text-gray-600">Please provide details and images of your pole</p>
@@ -437,7 +438,7 @@ export const Sell = () => {
             </span>
           </div>
           <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
               Image(s) <span className="text-red-500">*</span>
             </label>
             <input
@@ -450,17 +451,46 @@ export const Sell = () => {
               hover:file:bg-gray-200 focus:outline-none"
             />
           </div>
+          <div className="flex items-start space-x-2">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1"
+            />
+            <label htmlFor="terms" className="text-sm text-gray-600">
+              I have read and agree to the{' '}
+              <button
+                type="button"
+                onClick={() => setIsTermsOpen(true)}
+                className="text-blue-500 hover:text-blue-600"
+              >
+                Terms of Service
+              </button>
+              {' '}and{' '}
+              <button
+                type="button"
+                onClick={() => setIsPrivacyOpen(true)}
+                className="text-blue-500 hover:text-blue-600"
+              >
+                Privacy Policy
+              </button>
+            </label>
+          </div>
           <p className="text-gray-500 pb-6"><span className="text-red-500">*</span> indicates a required field</p>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !acceptedTerms}
             className={`w-full h-12 rounded-lg font-semibold text-white transition
-            ${isSubmitting ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
+            ${isSubmitting || !acceptedTerms ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
           >
             {isSubmitting ? "Creating Listing..." : "List Pole"}
           </button>
         </form>
       </div>
+      <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
+      <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
     </div>
   ) : (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 py-12">
@@ -483,6 +513,8 @@ export const Sell = () => {
                 </Link>
             </div>
         </div>
-  </div>
+    </div>
   );
 };
+
+export default Sell;
