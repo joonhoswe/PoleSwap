@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
-import { RoutePaths } from "../general/RoutePaths";
-import ConfettiExplosion from "react-confetti-explosion";
+import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/clerk-react';
+import { Link } from 'react-router-dom';
+import { RoutePaths } from '../general/RoutePaths';
+import ConfettiExplosion from 'react-confetti-explosion';
+import TermsModal from '../components/TermsModal';
+import PrivacyModal from '../components/PrivacyModal';
 
 export const Sell = () => {
   const { isSignedIn, user } = useUser();
@@ -23,7 +25,19 @@ export const Sell = () => {
     description: "",
     images: [],
     owner: email,
+    state: "",
+    city: ""
   });
+  const states = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+    "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+    "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+    "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+    "Wisconsin", "Wyoming"
+  ];
 
   useEffect(() => {
     if (isSignedIn && user?.primaryEmailAddress?.emailAddress) {
@@ -33,47 +47,51 @@ export const Sell = () => {
       }));
     }
   }, [isSignedIn, user]);
-
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [posted, setPosted] = useState(false);
   const [listingId, setListingId] = useState(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   const MAX_DESCRIPTION_LENGTH = 500;
   const remainingChars = MAX_DESCRIPTION_LENGTH - formData.description.length;
 
+  function capitalizeFirstLetter(val) {
+    return val.split(" ").map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(" ");
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Handle price validation
     if (name === 'price') {
-      // Only allow numbers with up to 2 decimal places and max 7 digits
       const regex = /^\d{0,7}(\.\d{0,2})?$/;
       if (!regex.test(value)) return;
     }
 
-    // Handle length validation
     if (name === 'lengthFeet' || name === 'lengthInches') {
       if (value <= 0) return;
     }
 
-    // Handle weight validation
     if (name === 'weight' || name === 'weightCustom') {
       if (value <= 0) return;
     }
 
-    // Handle flex validation
+    if (name === 'city') {
+      const regex = /^$|^[a-zA-Z]+$/;
+      if (!regex.test(value)) return;
+    }
+
     if (name === 'flex') {
         const regex = /^\d{0,2}(\.\d{0,2})?$/;
         if (!regex.test(value)) return;
       }
 
-    // Handle description length
     if (name === 'description' && value.length > MAX_DESCRIPTION_LENGTH) return;
 
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setFormData((prev) => ({ ...prev, images: files }));
@@ -97,6 +115,8 @@ export const Sell = () => {
         weightCustom,
         flex,
         description,
+        state,
+        city
       } = formData;
       if (
         !title ||
@@ -105,7 +125,7 @@ export const Sell = () => {
         (!brand && !brandCustom) ||
         (!length && !lengthFeet && !lengthInches) ||
         (!weight && !weightCustom) || !flex ||
-        !description
+        !description || !state || !city
       ) {
         setError("Please fill in all required fields.");
         return;
@@ -123,6 +143,8 @@ export const Sell = () => {
         const inches = parseFloat(lengthInches || "0") / 12;
         finalLength = feet + inches;
       }
+      const formattedState = capitalizeFirstLetter(state);
+      const formattedCity = capitalizeFirstLetter(city);
       const parsedPrice = parseFloat(price);
       const parsedWeight = parseInt(finalWeight, 10);
       const parsedLength = parseFloat(finalLength);
@@ -137,6 +159,9 @@ export const Sell = () => {
       formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
       formDataToSend.append("owner", formData.owner);
+      formDataToSend.append("state", formattedState);
+      formDataToSend.append("city", formattedCity);
+
       for (const image of formData.images) {
         formDataToSend.append("images", image);
       }
@@ -153,7 +178,14 @@ export const Sell = () => {
       setPosted(true);
 
     } catch (err) {
-      setError("Failed to create listing. Please try again.");
+      console.error('Error details:', err);
+      setError(err.message || "Failed to create listing. Please try again.");
+      
+      if (err.response) {
+        const errorMessage = await err.response.text();
+        console.error('Server response:', errorMessage);
+        setError(`Server error: ${errorMessage}`);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -174,10 +206,10 @@ export const Sell = () => {
   }
 
   return !posted ? (
-    <div className="h-screen w-full bg-white px-4 py-4">
-      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-8">
+    <div className="flex-1 w-full bg-white px-4 py-4">
+      <div className="mx-auto w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 mb-8">
         <div className="mb-6 text-center">
-          <h1 className="mb-2 text-3xl font-extrabold text-gray-800">Sell Your Pole</h1>
+          <h1 className="mb-2 text-2xl font-extrabold text-gray-800">Sell Your Pole</h1>
           <p className="text-gray-600">Please provide details and images of your pole</p>
         </div>
         {error && (
@@ -185,7 +217,7 @@ export const Sell = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Title <span className="text-red-500">*</span>
@@ -196,10 +228,43 @@ export const Sell = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="Short, catchy title"
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                State <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                required
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select State</option>
+                {states.map(state => (
+                  <option key={state} value={state}>{state}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                City <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Ex: Atlanta"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Price ($) <span className="text-red-500">*</span>
@@ -212,26 +277,26 @@ export const Sell = () => {
                 placeholder="Enter price"
                 min="0"
                 step="0.01"
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                 Maximum price: $9,999,999.99
                 </p>
             </div>
             <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Condition <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="condition"
-              value={formData.condition}
-              onChange={handleChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-            >
-              <option value="">Select Condition</option>
-              <option value="new">New</option>
-              <option value="used">Used</option>
-            </select>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Condition <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="condition"
+                value={formData.condition}
+                onChange={handleChange}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select Condition</option>
+                <option value="new">New</option>
+                <option value="used">Used</option>
+              </select>
             </div>
           </div>
          
@@ -243,7 +308,7 @@ export const Sell = () => {
               name="brand"
               value={formData.brand}
               onChange={handleChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
             >
               <option value="">Select Brand</option>
               <option value="essx">ESSX</option>
@@ -266,7 +331,7 @@ export const Sell = () => {
               />
             )}
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Length (ft) <span className="text-red-500">*</span>
@@ -275,7 +340,7 @@ export const Sell = () => {
                 name="length"
                 value={formData.length}
                 onChange={handleChange}
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select Length</option>
                 {[...Array(23)].map((_, i) => {
@@ -318,7 +383,7 @@ export const Sell = () => {
                 name="weight"
                 value={formData.weight}
                 onChange={handleChange}
-                className="w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
               >
                 <option value="">Select Weight</option>
                 {[...Array(39)].map((_, i) => {
@@ -352,14 +417,12 @@ export const Sell = () => {
                 value={formData.flex}
                 onChange={handleChange}
                 placeholder="Enter flex"
-                min="0"
-                step="0.01"
-                className="w-full h-10 rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -368,14 +431,14 @@ export const Sell = () => {
               onChange={handleChange}
               placeholder="Enter a detailed description..."
               maxLength={MAX_DESCRIPTION_LENGTH}
-              className="w-full h-28 resize-none rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+              className="w-full h-32 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none resize-none"
             />
             <span className={`text-xs ${remainingChars < 50 ? 'text-orange-500' : 'text-gray-500'}`}>
                 {remainingChars} characters remaining
             </span>
           </div>
           <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
               Image(s) <span className="text-red-500">*</span>
             </label>
             <input
@@ -383,21 +446,51 @@ export const Sell = () => {
               accept="image/*"
               multiple
               onChange={handleImageChange}
-              className="w-full rounded border border-gray-300 px-4 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 hover:file:bg-gray-200 focus:outline-none"
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 py-2 file:mr-4 file:py-2 file:px-4 
+              file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 
+              hover:file:bg-gray-200 focus:outline-none"
             />
+          </div>
+          <div className="flex items-start space-x-2">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-1"
+            />
+            <label htmlFor="terms" className="text-sm text-gray-600">
+              I have read and agree to the{' '}
+              <button
+                type="button"
+                onClick={() => setIsTermsOpen(true)}
+                className="text-blue-500 hover:text-blue-600"
+              >
+                Terms of Service
+              </button>
+              {' '}and{' '}
+              <button
+                type="button"
+                onClick={() => setIsPrivacyOpen(true)}
+                className="text-blue-500 hover:text-blue-600"
+              >
+                Privacy Policy
+              </button>
+            </label>
           </div>
           <p className="text-gray-500 pb-6"><span className="text-red-500">*</span> indicates a required field</p>
           <button
             type="submit"
-            disabled={isSubmitting}
-            className={`mt-2 w-full rounded bg-blue-500 px-4 py-2 font-semibold text-white transition ${
-              isSubmitting ? "cursor-not-allowed bg-blue-300" : "hover:bg-blue-600"
-            }`}
+            disabled={isSubmitting || !acceptedTerms}
+            className={`w-full h-12 rounded-lg font-semibold text-white transition
+            ${isSubmitting || !acceptedTerms ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
           >
             {isSubmitting ? "Creating Listing..." : "List Pole"}
           </button>
         </form>
       </div>
+      <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
+      <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
     </div>
   ) : (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 py-12">
@@ -420,6 +513,8 @@ export const Sell = () => {
                 </Link>
             </div>
         </div>
-  </div>
+    </div>
   );
 };
+
+export default Sell;

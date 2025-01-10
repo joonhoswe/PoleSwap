@@ -3,7 +3,7 @@ import { RoutePaths } from '../general/RoutePaths';
 
 export const Home = () => {
   return (
-    <div className="min-h-[calc(100vh-5rem)] flex flex-col">
+    <div className="flex flex-col flex-1">
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-16">
         <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-gray-900 text-center mb-2 md:mb-6">
@@ -15,13 +15,13 @@ export const Home = () => {
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Link 
             to={RoutePaths.LISTINGS} 
-            className="flex items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
+            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
           >
             Browse Poles
           </Link>
           <Link 
             to={RoutePaths.SELL} 
-            className="flex items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
+            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
           >
             Sell Poles
           </Link>
@@ -40,7 +40,7 @@ export const Home = () => {
             <FeatureCard 
               icon="verify"
               title="Live Listings"
-              description="View only poles actively for sale"
+              description="View poles actively for sale"
             />
             <FeatureCard 
               icon="chat"

@@ -37,6 +37,8 @@ def createObject(request):
     title = request.data.get('title')
     description = request.data.get('description')
     owner = request.data.get('owner')
+    state = request.data.get('state')
+    city = request.data.get('city')
     
     # 3) Build a plain dictionary including image_urls
     serializer_data = {
@@ -50,6 +52,8 @@ def createObject(request):
         'description': description,
         'image_urls': image_urls,
         'owner': owner,
+        'state': state,
+        'city': city,
     }
 
     # 4) Validate & save with serializer

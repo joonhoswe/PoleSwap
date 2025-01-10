@@ -16,6 +16,8 @@ class Object(models.Model):
     owner = models.CharField(max_length=50, default='admin')
     date_time_posted = models.DateTimeField(default = timezone.now, blank=True)
     saved = models.JSONField(default=list, blank=True)
+    state = models.CharField(max_length=50, default='not specified')
+    city = models.CharField(max_length=100, default='not specified')
 
     def __str__(self):
         return f"{self.brand} {self.length}' - ${self.price}"

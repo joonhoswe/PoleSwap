@@ -12,8 +12,8 @@ export const Listings = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [filters, setFilters] = useState({
-        zipCode: '',
-        distance: '',
+        state: '',
+        city: '',
         brand: '',
         length: '',
         weight: '',
@@ -23,6 +23,21 @@ export const Listings = () => {
         conditionUsed: false,
     });
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+    const states = [
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+        "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
+        "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+        "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+        "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+        "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+        "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+        "Wisconsin", "Wyoming"
+    ];
+
+    function capitalizeFirstLetter(val) {
+        return val.split(" ").map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(" ");
+    }
 
     // Memoized fetch function
     const fetchListings = useCallback(async () => {
@@ -69,8 +84,11 @@ export const Listings = () => {
         if (filters.conditionUsed) {
             filtered = filtered.filter(listing => listing.condition === 'used');
         }
-        if (filters.distance && filters.zipCode) {
-            // Implement distance filtering logic here
+        if (filters.state) {
+           filtered = filtered.filter(listing => listing.state === filters.state);
+        }
+        if (filters.city) {
+           filtered = filtered.filter(listing => listing.city === capitalizeFirstLetter(filters.city));
         }
 
         // Apply sorting
@@ -127,34 +145,36 @@ export const Listings = () => {
             <div className="w-full hidden md:block md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
-                    {/* Zip Code */}
+                    {/* State Filter */}
                     <div className="space-y-2">
-                        <label className="font-medium">Zip Code</label>
-                        <input
-                            type="text"
-                            name="zipCode"
-                            placeholder="Enter zip code"
-                            value={filters.zipCode}
-                            onChange={handleFilterChange}
-                            className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                        />
-                    </div>
-
-                    {/* Distance Filter */}
-                    <div className="space-y-2">
-                        <label className="font-medium">Distance</label>
+                        <label className="font-medium">State</label>
                         <select 
-                            name="distance" 
+                            name="state" 
                             onChange={handleFilterChange} 
-                            value={filters.distance}
+                            value={filters.state}
                             className="w-full rounded-lg border border-gray-300 px-4 py-2"
                         >
                             <option value="">Nationwide</option>
-                            <option value="10">Within 10 miles</option>
-                            <option value="25">Within 25 miles</option>
-                            <option value="50">Within 50 miles</option>
-                            <option value="100">Within 100 miles</option>
+                            {states.map(state => (
+                            <option key={state} value={state}>
+                                {state}
+                            </option>
+                            ))}
                         </select>
+                    </div>
+
+                    {/* City Filter */}
+                    <div className="space-y-2">
+                        <label className="font-medium">City</label>
+                        <input 
+                            type="text"
+                            name="city" 
+                            placeholder="Statewide"
+                            onChange={handleFilterChange} 
+                            value={filters.city}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                        >
+                        </input>
                     </div>
 
                     {/* Brand Filter */}
@@ -325,6 +345,8 @@ export const Listings = () => {
                                         condition={listing.condition}
                                         price={listing.price}
                                         imageUrls={listing.image_urls}
+                                        state={listing.state}
+                                        city={listing.city}
                                     />
                                 ))}
                             </div>
@@ -361,6 +383,7 @@ export const Listings = () => {
   handleFilterChange={handleFilterChange}
   isOpen={isMobileFilterOpen}
   onClose={() => setIsMobileFilterOpen(false)}
+  states={states}
 />
         </div>
     );
