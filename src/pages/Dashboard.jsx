@@ -116,7 +116,7 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container w-screen mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
       {/* Tabs */}
@@ -161,7 +161,7 @@ export const Dashboard = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       ) : (
-        <div className="mt-6">
+        <div className="mt-6 min-w-screen">
           {activeTab === "my-listings" && (
             <>
               {myListings.length > 0 ? (
