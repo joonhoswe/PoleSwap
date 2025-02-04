@@ -332,48 +332,54 @@ export const Listings = () => {
                 ) : (
                     <>
                         {/* Grid View */}
-                        <div className="p-4 overflow-y-auto h-[calc(100%-4rem)]">
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                                {paginatedListings.map(listing => (
-                                    <PoleCard
-                                        key={listing.id}
-                                        id={listing.id}
-                                        title={listing.title}
-                                        brand={listing.brand}
-                                        length={listing.length}
-                                        weight={listing.weight}
-                                        condition={listing.condition}
-                                        price={listing.price}
-                                        imageUrls={listing.image_urls}
-                                        state={listing.state}
-                                        city={listing.city}
-                                    />
-                                ))}
-                            </div>
-
-                            {/* Pagination Controls */}
-                            {totalPages > 1 && (
-                                <div className="flex justify-center mt-6 gap-2">
-                                    <button
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
-                                    >
-                                        Previous
-                                    </button>
-                                    <span className="px-4 py-2">
-                                        Page {currentPage} of {totalPages}
-                                    </span>
-                                    <button
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
-                                    >
-                                        Next
-                                    </button>
+                        <div className="p-4 overflow-y-auto h-[calc(100vh-10rem)]">
+                            {paginatedListings.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                                    {paginatedListings.map(listing => (
+                                        <PoleCard
+                                            key={listing.id}
+                                            id={listing.id}
+                                            title={listing.title}
+                                            brand={listing.brand}
+                                            length={listing.length}
+                                            weight={listing.weight}
+                                            condition={listing.condition}
+                                            price={listing.price}
+                                            imageUrls={listing.image_urls}
+                                            state={listing.state}
+                                            city={listing.city}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-center h-full">
+                                    <p className="text-gray-500 text-lg">No listings match your search criteria</p>
                                 </div>
                             )}
                         </div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="flex justify-center mt-6 gap-2">
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
+                                >
+                                    Previous
+                                </button>
+                                <span className="px-4 py-2">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>
