@@ -19,5 +19,8 @@ class Object(models.Model):
     state = models.CharField(max_length=50, default='not specified')
     city = models.CharField(max_length=100, default='not specified')
 
+    class Meta:
+        db_table = 'Listings'
+
     def __str__(self):
         return f"{self.brand} {self.length}' - ${self.price}"

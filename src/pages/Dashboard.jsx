@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import supabase from "../utils/supabase";
 import { useUser } from "@clerk/clerk-react";
 import { PoleCard } from "../components/PoleCard";
 import { Inbox } from "lucide-react";
@@ -23,8 +24,7 @@ export const Dashboard = () => {
         setIsLoading(true);
 
         // 1) Fetch ALL listings
-        const allResponse = await fetch("http://127.0.0.1:8000/api/get/");
-        const allData = await allResponse.json();
+        const { allData } = await supabase.from('Listings').select()
 
         // 2) Filter to get "My Listings"
         const filteredMyListings = allData.filter(

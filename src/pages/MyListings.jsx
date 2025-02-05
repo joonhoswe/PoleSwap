@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import supabase from "../utils/supabase";
 import { PoleCard } from "../components/PoleCard";
 import { useUser } from '@clerk/clerk-react'
 
@@ -13,8 +14,8 @@ export const MyListings = () => {
 
     useEffect(() => {
         const fetchListings = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/get/');
-            const data = await response.json();
+            // const response = await fetch('http://127.0.0.1:8000/api/get/');
+            const { data } = await supabase.from('Listings').select()
             setListings(data.filter(listing => listing.owner === email)); 
         };
         fetchListings();

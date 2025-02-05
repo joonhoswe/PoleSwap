@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import supabase from "../utils/supabase";
 import { useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MessageCircle, Heart, Pencil } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import supabase from '../utils/supabase';
 import { useUser } from '@clerk/clerk-react';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from '../general/RoutePaths';
@@ -178,8 +179,7 @@ export const Sell = () => {
       setPosted(true);
 
     } catch (err) {
-      console.error('Error details:', err);
-      setError(err.message || "Failed to create listing. Please try again.");
+      setError("Failed to create listing. Please try again.");
       
       if (err.response) {
         const errorMessage = await err.response.text();
