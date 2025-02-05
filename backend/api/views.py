@@ -88,6 +88,7 @@ def getObjectById(request, id):
 def deleteObject(request, id):
     obj = get_object_or_404(Object, id=id)
     if request.method == 'DELETE':
+        # add code to delete from S3
         obj.delete()
         return Response({'message': 'Object deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 

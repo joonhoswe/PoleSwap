@@ -24,16 +24,16 @@ export const Dashboard = () => {
         setIsLoading(true);
 
         // 1) Fetch ALL listings
-        const { allData } = await supabase.from('Listings').select()
+        const { data } = await supabase.from('Listings').select()
 
         // 2) Filter to get "My Listings"
-        const filteredMyListings = allData.filter(
+        const filteredMyListings = data.filter(
           (listing) => listing.owner === userEmail
         );
         setMyListings(filteredMyListings);
 
         // 3) Fetch "Saved" listings (same as before)
-        const savedListingsData = allData.filter(
+        const savedListingsData = data.filter(
             (listing) => listing.saved.includes(userEmail)
         )
         setSavedListings(savedListingsData);

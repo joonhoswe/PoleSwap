@@ -24,12 +24,10 @@ export const CurrentListing = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/get/${id}/`);
-        if (!response.ok) throw new Error("Failed to fetch listing");
-        const data = await response.json();
-        setListing(data);
+        const { data } = await supabase.from('Listings').select().eq("id", id)
+        setListing(data[0]);
       } catch (err) {
-        setError(err.message);
+        setError("Error fetching listing, please try again.");
       } finally {
         setLoading(false);
       }
