@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2, X, Save, AlertTriangle } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export const EditButton = ({ listing, onListingUpdate }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -229,7 +231,10 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
         { method: "DELETE" }
       );
       if (!response.ok) throw new Error("Failed to delete listing");
-      window.location.href = "/listings";
+
+      await response.text();
+
+      navigate(RoutePaths.LISTINGS)
     } catch (err) {
       setError("Failed to delete listing. Please try again.");
     }
