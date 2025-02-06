@@ -97,6 +97,8 @@ export const CurrentListing = () => {
         throw new Error(isSaved ? "Failed to unsave listing." : "Failed to save listing.");
       }
 
+      setSaveLoading(false);
+
       const data = await response.json();
       setListing((prev) => ({ ...prev, saved: data.saved }));
     } catch (err) {
@@ -252,12 +254,12 @@ export const CurrentListing = () => {
                       title={isUserSaved ? "Unsave" : "Save"}
                     >
                       {
-                        saveLoading ? <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" /> : 
+                        saveLoading ? <div className="animate-spin rounded-full h-5 w-5 border-4 border-blue-500 border-t-transparent" /> : 
                         <>
                           <Heart className="w-5 h-5" />
                           {isUserSaved ? "Unsave" : "Save"}
                         </>
-                      };
+                      }
                       
                     </button>
                     <button
