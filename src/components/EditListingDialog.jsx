@@ -231,6 +231,8 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
         { method: "DELETE" }
       );
       if (!response.ok) throw new Error(response);
+      console.log(response)
+      console.log(error)
 
       navigate(RoutePaths.LISTINGS)
     } catch (err) {
