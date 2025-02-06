@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://www.poleswapper.com", os.environ.get('DEPLOYED_BACKEND_URL'), os.environ.get('BACKEND_URL'), os.environ.get('VITE_SUPABASE_URL')]
+ALLOWED_HOSTS = ["https://www.poleswapper.com", os.environ.get('DEPLOYED_BACKEND_URL'), os.environ.get('BACKEND_URL'), os.environ.get('VITE_SUPABASE_URL'), "127.0.0.1:8000"]
 
 
 # Application definition
