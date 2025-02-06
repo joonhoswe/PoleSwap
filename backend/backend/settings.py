@@ -134,7 +134,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # React app URL
 ]
 
-AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
+AWS_ACCESS_KEY = os.environ.get('AWS_MY_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 AWS_REGION = os.environ.get('AWS_REGION')
