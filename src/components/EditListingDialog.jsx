@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Pencil, Trash2, X, Save, AlertTriangle } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
+import { RoutePaths } from "../general/RoutePaths";
 
 export const EditButton = ({ listing, onListingUpdate }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -230,9 +231,13 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
         `${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/delete/${listing.id}/`,
         { method: "DELETE" }
       );
-      // if (!response.ok) throw new Error("Failed to delete listing");
-
-      navigate(RoutePaths.LISTINGS)
+      if (!response.ok) throw new Error("Failed to delete listing");
+      
+      // Wait for the response to complete
+      await response.text();
+      
+      // Navigate to listings page
+      navigate('/listings');
     } catch (err) {
       setError("Failed to delete listing. Please try again.");
     }
