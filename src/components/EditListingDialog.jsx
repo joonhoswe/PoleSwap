@@ -230,13 +230,13 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
         `${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/delete/${listing.id}/`,
         { method: "DELETE" }
       );
-      if (!response.ok) throw new Error(response);
+      if (!response.ok) throw new Error("Failed to delete listing");
       console.log(response)
       console.log(error)
 
       navigate(RoutePaths.LISTINGS)
     } catch (err) {
-      setError(err);
+      setError("Failed to delete listing. Please try again.");
     }
   };
 
