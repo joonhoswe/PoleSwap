@@ -237,7 +237,7 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
       await response.text();
       
       // Navigate to listings page
-      navigate(RoutePaths.LISTINGS);
+      // navigate(RoutePaths.LISTINGS);
       window.location.href = "/listings";
     } catch (err) {
       setError("Failed to delete listing. Please try again.");
