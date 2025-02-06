@@ -233,11 +233,10 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
       );
       if (!response.ok) throw new Error("Failed to delete listing");
       
-      // Wait for the response to complete
-      await response.text();
+      // Close the dialog first
+      onClose();
       
-      // Navigate to listings page
-      // navigate(RoutePaths.LISTINGS);
+      // Then redirect
       window.location.href = "/listings";
     } catch (err) {
       setError("Failed to delete listing. Please try again.");
