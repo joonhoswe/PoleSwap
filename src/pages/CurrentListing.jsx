@@ -11,6 +11,7 @@ export const CurrentListing = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saveLoading, setSaveLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -79,6 +80,7 @@ export const CurrentListing = () => {
 
     const isSaved = listing.saved?.includes(userEmail);
     try {
+      setSaveLoading(true);
       const response = await fetch(`${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/patch/`, {
         method: "PATCH",
         headers: {
@@ -249,8 +251,14 @@ export const CurrentListing = () => {
                       }`}
                       title={isUserSaved ? "Unsave" : "Save"}
                     >
-                      <Heart className="w-5 h-5" />
-                      {isUserSaved ? "Unsave" : "Save"}
+                      {
+                        saveLoading ? <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent" /> : 
+                        <>
+                          <Heart className="w-5 h-5" />
+                          {isUserSaved ? "Unsave" : "Save"}
+                        </>
+                      };
+                      
                     </button>
                     <button
                       onClick={handleContact}

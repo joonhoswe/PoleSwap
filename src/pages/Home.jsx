@@ -3,7 +3,7 @@ import { RoutePaths } from '../general/RoutePaths';
 
 export const Home = () => {
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col px-8 flex-1">
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-16">
         <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-gray-900 text-center mb-2 md:mb-6">

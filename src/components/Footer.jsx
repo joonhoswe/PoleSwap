@@ -13,13 +13,13 @@ export const Footer = () => {
           <span>© 2025 PoleSwapper. All rights reserved.</span>
           <button 
             onClick={() => setIsTermsOpen(true)}
-            className="hover:text-blue-500 transition-colors"
+            className="hover:text-blue-500 transition-colors underline"
           >
             Terms of Service
           </button>
           <button 
             onClick={() => setIsPrivacyOpen(true)}
-            className="hover:text-blue-500 transition-colors"
+            className="hover:text-blue-500 transition-colors underline"
           >
             Privacy Policy
           </button>
