@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [os.environ.get('DEPLOYED_BACKEND_URL'), os.environ.get('BACKEND_URL'), 'localhost', '127.0.0.1', os.environ.get('VITE_SUPABASE_URL')]
+ALLOWED_HOSTS = ["https://www.poleswapper.com", os.environ.get('DEPLOYED_BACKEND_URL'), os.environ.get('BACKEND_URL'), os.environ.get('VITE_SUPABASE_URL')]
 
 
 # Application definition
@@ -135,9 +135,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React app URL
     os.environ.get('DEPLOYED_BACKEND_URL'),
-    # os.environ.get('BACKEND_URL')
+    "https://www.poleswapper.com"
 ]
 
 AWS_ACCESS_KEY = os.environ.get('AWS_MY_ACCESS_KEY')
