@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import supabase from "../utils/supabase";
 import { PoleCard } from "../components/PoleCard";
 import { useUser } from '@clerk/clerk-react'
 
@@ -13,24 +14,11 @@ export const MyListings = () => {
 
     useEffect(() => {
         const fetchListings = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/get/');
-            const data = await response.json();
+            const { data } = await supabase.from('Listings').select()
             setListings(data.filter(listing => listing.owner === email)); 
         };
         fetchListings();
     }, []);
-
-    const handleDelete = async (id) => {
-        const response = await fetch(`http://127.0.0.1:8000/api/delete/${id}/`, {
-            method: 'DELETE',
-        });
-
-        if (response.ok) {
-            setListings(listings.filter(listing => listing.id !== id));
-        } else {
-            console.error('Failed to delete listing');
-        }
-    };
 
     if (isSignedIn) return (
         <div className="mt-10 flex w-full flex-col items-center px-4 text-black">

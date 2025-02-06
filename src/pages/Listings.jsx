@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { PoleCard } from "../components/PoleCard";
+import supabase from "../utils/supabase";
 import MobileFilterMenu from "../components/MobileFilterMenu";
 
 const ITEMS_PER_PAGE = 12;
@@ -43,13 +44,11 @@ export const Listings = () => {
     const fetchListings = useCallback(async () => {
         try {
             setIsLoading(true);
-            const response = await fetch('http://127.0.0.1:8000/api/get/');
-            const data = await response.json();
+            const { data } = await supabase.from('Listings').select()
             setListings(data);
             setFilteredListings(data);
         } catch (error) {
             console.error('Error fetching listings:', error);
-            // You might want to add error state handling here
         } finally {
             setIsLoading(false);
         }
