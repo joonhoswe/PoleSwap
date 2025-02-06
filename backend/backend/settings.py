@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', os.environ.get('VITE_SUPABASE_URL')]
+ALLOWED_HOSTS = [os.environ.get('DEPLOYED_BACKEND_URL'), os.environ.get('BACKEND_URL'), 'localhost', '127.0.0.1', os.environ.get('VITE_SUPABASE_URL')]
 
 
 # Application definition
@@ -85,7 +85,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
@@ -132,6 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # React app URL
+    os.environ.get('DEPLOYED_BACKEND_URL'),
+    # os.environ.get('BACKEND_URL')
 ]
 
 AWS_ACCESS_KEY = os.environ.get('AWS_MY_ACCESS_KEY')

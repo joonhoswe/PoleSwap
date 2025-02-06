@@ -166,7 +166,7 @@ export const Sell = () => {
       for (const image of formData.images) {
         formDataToSend.append("images", image);
       }
-      const response = await fetch("http://127.0.0.1:8000/api/post/", {
+      const response = await fetch(`${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/post/`, {
         method: "POST",
         body: formDataToSend,
       });

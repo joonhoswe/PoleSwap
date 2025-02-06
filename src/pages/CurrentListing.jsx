@@ -79,7 +79,7 @@ export const CurrentListing = () => {
 
     const isSaved = listing.saved?.includes(userEmail);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/patch/", {
+      const response = await fetch(`${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/patch/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
