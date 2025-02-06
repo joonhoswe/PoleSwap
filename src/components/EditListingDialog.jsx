@@ -198,7 +198,7 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
 
       // Send PATCH request to your API
       const response = await fetch(
-        `http://127.0.0.1:8000/api/update/${listing.id}/`,
+        `${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/update/${listing.id}/`,
         {
           method: "PATCH",
           headers: {
@@ -225,7 +225,7 @@ const EditListingDialog = ({ listing, onClose, onUpdate }) => {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/delete/${listing.id}/`,
+        `${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/delete/${listing.id}/`,
         { method: "DELETE" }
       );
       if (!response.ok) throw new Error("Failed to delete listing");
