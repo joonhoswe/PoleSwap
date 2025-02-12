@@ -10,11 +10,8 @@
   <p> https://poleswapper.com </p>
 
   <h2> Core Features </h2>
-  <p> 1. Search for a school and see all nearby active listings with rooms available </p>
-  <p> 2. Select a desired apartment and join with a click of a button </p>
-  <p> 3. Filled up listings are automatically deleted from the map </p>
-  <p> 4. Post a listing for a desired apartment and wait for users to join it </p>
-  <p> 5. Once a listing is full, be entered in a groupchat with future roommates </p>
+  <p> 1. Browse available poles nationwide, within your state, or within your city </p>
+  <p> 2. Easily post a listing by filling out the form </p>
 
   <h2> Application Architecture </h2>
   <p> Frontend: React + Vite, JavaScript, and TailwindCSS </p> 
