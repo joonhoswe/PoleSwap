@@ -4,6 +4,11 @@ import { ArrowRight, Users, Star, ShoppingBag, Award } from 'lucide-react';
 import TestimonialCarousel from '../components/TestimonialCarousel';  
 import FeatureCard from '../components/FeatureCard';
 import mondo from '../assets/mondo.jpg';
+import Slider from 'react-infinite-logo-slider';
+import essx from '../assets/essx.png';
+import ucs from '../assets/ucs.png';
+import pacer from '../assets/pacer.png';
+import nordic from '../assets/nordic.png';
 
 export const Home = () => {
   return (
@@ -71,6 +76,34 @@ export const Home = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Brand Slider */}
+      <div className="bg-white py-12 sm:py-16 md:py-20 w-full overflow-hidden">
+        <div className="w-full mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8">Featuring brands such as:</h2>
+          <div className="w-full overflow-hidden max-w-[calc(100vw-40px)] mx-auto">
+            <Slider
+              duration={30}
+              blurBorders={false}
+              blurBorderColor={'#fff'}
+              className="max-w-full"
+            >
+              <Slider.Slide>
+                <img src={essx} alt="Essx Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
+              <Slider.Slide>
+                <img src={ucs} alt="UCS Spirit Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
+              <Slider.Slide>
+                <img src={pacer} alt="Pacer Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
+              <Slider.Slide>
+                <img src={nordic} alt="Nordic Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
+            </Slider>
           </div>
         </div>
       </div>
@@ -144,7 +177,7 @@ export const Home = () => {
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl">2</div>
               <div className="pt-14 sm:pt-16 px-4 sm:px-6 pb-6 sm:pb-8 bg-white rounded-lg shadow-sm text-center">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Browse or List</h3>
-                <p className="text-sm text-gray-600">Search for poles that match your needs or list your pole with detailed specifications.</p>
+                <p className="text-sm text-gray-600">Search for poles that match your needs or list your pole for sale.</p>
               </div>
             </div>
             <div className="relative px-3 sm:col-span-2 md:col-span-1 sm:mx-auto md:mx-0 sm:max-w-sm md:max-w-none">
