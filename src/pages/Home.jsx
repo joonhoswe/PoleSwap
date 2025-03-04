@@ -86,8 +86,7 @@ export const Home = () => {
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8">Featuring brands such as:</h2>
           <div className="w-full overflow-hidden max-w-[calc(100vw-40px)] mx-auto">
             <Slider
-              duration={40}
-              pauseOnHover={true}
+              duration={30}
               blurBorders={false}
               blurBorderColor={'#fff'}
               className="max-w-full"
