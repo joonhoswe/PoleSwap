@@ -42,6 +42,8 @@ const TestimonialCarousel = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
   const intervalRef = useRef(null);
 
   const nextTestimonial = () => {
@@ -58,6 +60,24 @@ const TestimonialCarousel = () => {
     setTimeout(() => setIsAnimating(false), 500);
   };
 
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 50) {
+      // Swipe left, go to next
+      nextTestimonial();
+    } else if (touchEndX - touchStartX > 50) {
+      // Swipe right, go to previous
+      prevTestimonial();
+    }
+  };
+
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       nextTestimonial();
@@ -71,39 +91,42 @@ const TestimonialCarousel = () => {
   }, []);
 
   return (
-    <div className="bg-white py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Vaulters Are Saying</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">Hear from the community about their experiences with PoleSwap.</p>
+    <div className="bg-white py-16 sm:py-20 md:py-24 overflow-hidden">
+      <div className="w-full mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl">
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">What Vaulters Are Saying</h2>
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Hear from the community about their experiences with PoleSwap.</p>
         </div>
         
-        <div className="relative max-w-4xl mx-auto">
-          <div className="overflow-hidden">
+        <div className="relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto overflow-hidden">
+          <div className="overflow-hidden rounded-xl shadow-lg">
             <div 
               className={`flex transition-transform duration-500 ease-in-out ${isAnimating ? 'opacity-80' : 'opacity-100'}`}
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
               {testimonials.map((testimonial) => (
-                <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
-                  <div className="bg-white p-8 rounded-xl shadow-lg">
-                    <div className="flex mb-4">
+                <div key={testimonial.id} className="w-full flex-shrink-0">
+                  <div className="bg-white p-4 sm:p-5 md:p-6">
+                    <div className="flex mb-3 sm:mb-4">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={20} 
-                          className={i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} 
+                        <Star
+                          key={i}
+                          size={16}
+                          className={i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}
                         />
                       ))}
                     </div>
-                    <p className="text-gray-700 text-lg mb-6 italic">"{testimonial.content}"</p>
+                    <p className="text-gray-700 text-xs sm:text-sm mb-4 italic">"{testimonial.content}"</p>
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-blue-600 font-bold text-xl">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold text-sm mr-3">
                         {testimonial.author.charAt(0)}
                       </div>
-                      <div className="ml-4">
-                        <h4 className="font-semibold text-gray-900">{testimonial.author}</h4>
-                        <p className="text-gray-600 text-sm">{testimonial.role}</p>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">{testimonial.author}</h4>
+                        <p className="text-gray-500 text-xs">{testimonial.role}</p>
                       </div>
                     </div>
                   </div>
@@ -113,22 +136,22 @@ const TestimonialCarousel = () => {
           </div>
           
           <button 
-            onClick={prevTestimonial}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100"
+            onClick={prevTestimonial} 
+            className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50"
             aria-label="Previous testimonial"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={16} />
           </button>
           
           <button 
             onClick={nextTestimonial}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100"
+            className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50"
             aria-label="Next testimonial"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={16} />
           </button>
           
-          <div className="flex justify-center mt-8 space-x-2">
+          <div className="flex justify-center gap-2 mt-4">
             {testimonials.map((_, i) => (
               <button
                 key={i}
@@ -137,7 +160,7 @@ const TestimonialCarousel = () => {
                   setCurrentIndex(i);
                   setTimeout(() => setIsAnimating(false), 500);
                 }}
-                className={`w-2.5 h-2.5 rounded-full ${i === currentIndex ? 'bg-blue-600' : 'bg-gray-300'}`}
+                className={`w-2 h-2 rounded-full transition-colors duration-300 ${i === currentIndex ? 'bg-blue-600' : 'bg-gray-300'}`}
                 aria-label={`Go to testimonial ${i + 1}`}
               />
             ))}

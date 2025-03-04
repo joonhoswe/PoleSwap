@@ -12,14 +12,14 @@ const FeatureCard = ({ icon, title, description }) => {
     };
   
     return (
-      <div className="bg-white p-8 rounded-lg shadow-md transition-transform hover:transform hover:-translate-y-1 hover:shadow-lg border border-gray-100">
-        <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-          <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="bg-white p-4 sm:p-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 h-full">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {icons[icon]}
           </svg>
         </div>
-        <h3 className="text-xl font-semibold mb-3">{title}</h3>
-        <p className="text-gray-600">{description}</p>
+        <h3 className="text-base sm:text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-xs sm:text-sm text-gray-600">{description}</p>
       </div>
     );
 };
