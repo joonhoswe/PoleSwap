@@ -33,11 +33,6 @@ export const Home = () => {
                 <Link 
                   to={RoutePaths.LISTINGS} 
                   className="flex justify-center items-center gap-2 w-full text-center px-5 py-3 text-sm sm:text-base font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md relative z-10"
-                  onClick={(e) => {
-                    console.log("Top 'Browse Poles' button clicked");
-                    // Ensure event propagation doesn't get stopped
-                    e.stopPropagation();
-                  }}
                 >
                   Browse Poles
                   <ArrowRight size={16} className="sm:hidden" />
@@ -46,11 +41,6 @@ export const Home = () => {
                 <Link 
                   to={RoutePaths.SELL} 
                   className="flex justify-center items-center w-full text-center px-5 py-3 text-sm sm:text-base font-semibold text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-colors relative z-10"
-                  onClick={(e) => {
-                    console.log("Top 'Sell Poles' button clicked");
-                    // Ensure event propagation doesn't get stopped
-                    e.stopPropagation();
-                  }}
                 >
                   Sell Poles
                 </Link>

@@ -46,6 +46,9 @@ export const Navbar = () => {
         {/* Desktop Navigation (Moved from 'flex-1 justify-center' to 'ml-auto') */}
         <div className="hidden md:flex items-center gap-8 ml-auto">
           <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
+            Contact Us
+          </Link>
+          <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
             Browse
           </Link>
           <Link to={RoutePaths.SELL} className="hover:text-blue-500">
@@ -81,7 +84,7 @@ export const Navbar = () => {
       <div
         className={`
           absolute top-20 left-0 right-0 bg-white border-b border-gray-200 md:hidden
-          overflow-hidden transition-all duration-300
+          overflow-hidden transition-all duration-300 z-50
           ${isOpen ? 'max-h-[200px] py-4' : 'max-h-0 py-0'}
         `}
       >
@@ -103,12 +106,23 @@ export const Navbar = () => {
           <SignedIn>
             <Link
               to={RoutePaths.DASHBOARD}
-              className="hover:text-blue-500 transition-colors"
-              onClick={() => setIsOpen(false)}
+              className="hover:text-blue-500 transition-colors font-medium"
+              onClick={() => {
+                setIsOpen(false);
+                // Force route change to ensure navigation works consistently
+                window.location.href = RoutePaths.DASHBOARD;
+              }}
             >
               Dashboard
             </Link>
           </SignedIn>
+          <Link
+            to={RoutePaths.CONTACT}
+            className="hover:text-blue-500 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            Contact Us
+          </Link>
         </div>
       </div>
     </div>

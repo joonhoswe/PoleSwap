@@ -7,6 +7,7 @@ import { MyListings } from "../pages/MyListings.jsx";
 import { Sell } from "../pages/Sell.jsx";
 import { CurrentListing } from "../pages/CurrentListing.jsx";
 import { Dashboard } from "../pages/Dashboard.jsx";
+import { Contact } from "../pages/Contact.jsx";
 import { NotFound } from "./NotFound.jsx";
 import { Layout } from "./Layout.jsx";
 
@@ -60,6 +61,14 @@ export const Router = () => (
         </Layout>
       }
     />
+    <Route
+      path={RoutePaths.CONTACT}
+      element={
+        <Layout>
+          <Contact />
+        </Layout>
+      }
+    />  
     <Route
       path="*"
       element={
