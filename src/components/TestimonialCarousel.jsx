@@ -119,7 +119,7 @@ const TestimonialCarousel = () => {
                         />
                       ))}
                     </div>
-                    <p className="text-gray-700 text-xs sm:text-sm mb-4 italic">"{testimonial.text}"</p>
+                    <p className="text-gray-700 text-xs sm:text-sm mb-4 italic">"{testimonial.content}"</p>
                     <div className="flex items-center">
                       <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold text-sm mr-3">
                         {testimonial.author.charAt(0)}
