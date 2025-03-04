@@ -1,81 +1,186 @@
 import { Link } from 'react-router-dom';
 import { RoutePaths } from '../general/RoutePaths';
-// testing fly.io CD
+import { ArrowRight, Users, Star, ShoppingBag, Award } from 'lucide-react';
+import TestimonialCarousel from '../components/TestimonialCarousel';  
+import FeatureCard from '../components/FeatureCard';
+import mondo from '../assets/mondo.jpg';
+
 export const Home = () => {
   return (
-    <div className="flex flex-col px-8 flex-1">
-      {/* Hero Section */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 md:py-16">
-        <h1 className="text-2xl md:text-3xl lg:text-5xl font-bold text-gray-900 text-center mb-2 md:mb-6">
-          Gear Up For Your Next <span className="text-blue-500">PR</span>
-        </h1>
-        <p className="text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl text-center mb-12 md:mb-8">
-          The first marketplace made for poles.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <Link 
-            to={RoutePaths.LISTINGS} 
-            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600 transition-colors"
-          >
-            Browse Poles
-          </Link>
-          <Link 
-            to={RoutePaths.SELL} 
-            className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3 text-sm md:text-base font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-50 transition-colors"
-          >
-            Sell Poles
-          </Link>
+    <div className="flex flex-col flex-1">
+      {/* Hero Section - Enhanced with background gradient and image */}
+      <div className="relative bg-white overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-20 md:py-28 lg:py-32 flex flex-col md:flex-row items-center relative z-10">
+            <div className="md:w-1/2 md:pr-8 mb-10 md:mb-0 relative z-10">
+              <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 mb-4 md:mb-6 leading-tight">
+                Find the perfect pole for your next <span className="text-blue-600 relative">
+                  PR
+                  <span className="absolute bottom-0 left-0 w-full h-2 bg-blue-100 -z-10 transform -rotate-1"></span>
+                </span>
+              </h1>
+              <p className="text-base md:text-lg lg:text-xl text-gray-600 mb-8 md:mb-10">
+                The first online marketplace made specifically for vaulters. 
+                Connect with sellers, find great deals, and vault higher.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 relative z-10">
+                <Link 
+                  to={RoutePaths.LISTINGS} 
+                  className="flex justify-center items-center gap-2 w-full sm:w-auto text-center px-6 py-3.5 text-base md:text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md relative z-10"
+                  onClick={(e) => {
+                    console.log("Top 'Browse Poles' button clicked");
+                    // Ensure event propagation doesn't get stopped
+                    e.stopPropagation();
+                  }}
+                >
+                  Browse Poles
+                  <ArrowRight size={18} />
+                </Link>
+                <Link 
+                  to={RoutePaths.SELL} 
+                  className="flex justify-center items-center w-full sm:w-auto text-center px-6 py-3.5 text-base md:text-lg font-semibold text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition-colors relative z-10"
+                  onClick={(e) => {
+                    console.log("Top 'Sell Poles' button clicked");
+                    // Ensure event propagation doesn't get stopped
+                    e.stopPropagation();
+                  }}
+                >
+                  Sell Poles
+                </Link>
+              </div>
+              {/* <div className="mt-8 flex items-center">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className={`w-8 h-8 rounded-full border-2 border-white bg-gray-${i*100} flex items-center justify-center text-white text-xs font-bold`}>
+                      {i}
+                    </div>
+                  ))}
+                </div>
+                <p className="ml-4 text-sm text-gray-600">Trusted by <span className="font-semibold">hundreds</span> of vaulters nationwide</p>
+              </div> */}
+            </div>
+            <div className="md:w-1/2 relative">
+              <div className="relative rounded-lg overflow-hidden shadow-2xl pointer-events-none">
+                <img 
+                  src={mondo}
+                  alt="Pole vaulter in action" 
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="w-full md:py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-12">
+      {/* Stats Section */}
+      {/* <div className="bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg border border-gray-100 shadow-sm">
+              <Users size={32} className="text-blue-600 mb-3" />
+              <h3 className="text-3xl font-bold text-gray-900">500+</h3>
+              <p className="text-gray-600 text-center">Active Vaulters</p>
+            </div>
+            <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg border border-gray-100 shadow-sm">
+              <ShoppingBag size={32} className="text-blue-600 mb-3" />
+              <h3 className="text-3xl font-bold text-gray-900">1,200+</h3>
+              <p className="text-gray-600 text-center">Poles Listed</p>
+            </div>
+            <div className="flex flex-col items-center p-6 bg-gray-50 rounded-lg border border-gray-100 shadow-sm">
+              <Award size={32} className="text-blue-600 mb-3" />
+              <h3 className="text-3xl font-bold text-gray-900">98%</h3>
+              <p className="text-gray-600 text-center">Satisfaction Rate</p>
+            </div>
+          </div>
+        </div>
+      </div> */}
+
+      {/* Features Section - Enhanced with better styling */}
+      <div className="bg-white py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose PoleSwapper?</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">We've built the perfect platform for vaulters to find and sell poles with ease.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <FeatureCard 
               icon="location"
               title="Local First"
-              description="Find poles in your area"
+              description="Find poles in your area to save on shipping costs and inspect before buying."
             />
             <FeatureCard 
               icon="verify"
               title="Live Listings"
-              description="View poles actively for sale"
+              description="Browse poles that are actually available, with real-time updates on status."
             />
             <FeatureCard 
               icon="chat"
               title="Direct Contact"
-              description="Connect directly with sellers"
+              description="Connect directly with sellers to ask questions and negotiate the best deal."
             />
           </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-const FeatureCard = ({ icon, title, description }) => {
-  const icons = {
-    location: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-    ),
-    verify: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    ),
-    chat: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-    )
-  };
-
-  return (
-    <div className="text-center p-6 bg-white rounded-lg">
-      <div className="mb-4 text-blue-500">
-        <svg className="w-8 h-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          {icons[icon]}
-        </svg>
+      {/* How It Works Section */}
+      <div className="bg-gray-50 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">Getting your next pole or selling your current one is simple with PoleSwap.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xl">1</div>
+              <div className="pt-16 px-6 pb-8 bg-white rounded-lg shadow-sm text-center">
+                <h3 className="text-xl font-semibold mb-3">Create an Account</h3>
+                <p className="text-gray-600">Sign up for free and set up your profile to start browsing or selling poles.</p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xl">2</div>
+              <div className="pt-16 px-6 pb-8 bg-white rounded-lg shadow-sm text-center">
+                <h3 className="text-xl font-semibold mb-3">Browse or List</h3>
+                <p className="text-gray-600">Search for poles that match your needs or list your pole with detailed specifications.</p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xl">3</div>
+              <div className="pt-16 px-6 pb-8 bg-white rounded-lg shadow-sm text-center">
+                <h3 className="text-xl font-semibold mb-3">Connect & Complete</h3>
+                <p className="text-gray-600">Message sellers, arrange meetups, and finalize your transaction safely.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h3 className="md:text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-sm md:text-base text-gray-600">{description}</p>
+
+      {/* Testimonial Carousel */}
+      <TestimonialCarousel />
+
+      {/* CTA Section */}
+      <div className="bg-gray-900 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to find your perfect pole?</h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Join hundreds of vaulters who have already found their ideal equipment through PoleSwap.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              to={RoutePaths.LISTINGS} 
+              className="px-8 py-4 text-lg font-semibold bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors shadow-md"
+            >
+              Browse Poles
+            </Link>
+            <Link 
+              to={RoutePaths.SELL} 
+              className="px-8 py-4 text-lg font-semibold bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors shadow-md"
+            >
+              Sell Your Pole
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
