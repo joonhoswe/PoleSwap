@@ -9,7 +9,7 @@ import essx from '../assets/essx.png';
 import ucs from '../assets/ucs.png';
 import pacer from '../assets/pacer.png';
 import nordic from '../assets/nordic.png';
-
+import dynasty from '../assets/dynasty.png';
 export const Home = () => {
   return (
     <div className="flex flex-col flex-1 overflow-x-hidden w-full">
@@ -93,6 +93,9 @@ export const Home = () => {
               <Slider.Slide>
                 <img src={nordic} alt="Nordic Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
               </Slider.Slide>
+              <Slider.Slide>
+                <img src={dynasty} alt="Dynasty Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
             </Slider>
           </div>
         </div>
@@ -149,28 +152,28 @@ export const Home = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="bg-gray-50 py-16 sm:py-20 md:py-24">
+      <div className="bg-white py-16 sm:py-20 md:py-24">
         <div className="w-full mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-4">How It Works</h2>
-            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Getting your next pole or selling your current one is simple with PoleSwap.</p>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Getting your next pole or selling your current one is simple with PoleSwapper.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-md sm:max-w-none mx-auto">
-            <div className="relative px-3">
+            <div className="relative px-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl">1</div>
               <div className="pt-14 sm:pt-16 px-4 sm:px-6 pb-6 sm:pb-8 bg-white rounded-lg shadow-sm text-center">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Create an Account</h3>
                 <p className="text-sm text-gray-600">Sign up for free and set up your profile to start browsing or selling poles.</p>
               </div>
             </div>
-            <div className="relative px-3">
+            <div className="relative px-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl">2</div>
               <div className="pt-14 sm:pt-16 px-4 sm:px-6 pb-6 sm:pb-8 bg-white rounded-lg shadow-sm text-center">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Browse or List</h3>
                 <p className="text-sm text-gray-600">Search for poles that match your needs or list your pole for sale.</p>
               </div>
             </div>
-            <div className="relative px-3 sm:col-span-2 md:col-span-1 sm:mx-auto md:mx-0 sm:max-w-sm md:max-w-none">
+            <div className="relative px-3 sm:col-span-2 md:col-span-1 sm:mx-auto md:mx-0 sm:max-w-sm md:max-w-none rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl">3</div>
               <div className="pt-14 sm:pt-16 px-4 sm:px-6 pb-6 sm:pb-8 bg-white rounded-lg shadow-sm text-center">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Connect & Complete</h3>
@@ -188,7 +191,7 @@ export const Home = () => {
       <div className="bg-gray-900 py-16 sm:py-20 w-full overflow-hidden">
         <div className="w-full mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl text-center">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5">Ready to find your perfect pole?</h2>
-          <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Join hundreds of vaulters who have already found their ideal equipment through PoleSwap.</p>
+          <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Join hundreds of vaulters who have already found their next pole through PoleSwapper.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-xs sm:max-w-md mx-auto">
             <Link 
               to={RoutePaths.LISTINGS} 

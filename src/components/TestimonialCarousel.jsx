@@ -5,39 +5,25 @@ const TestimonialCarousel = () => {
   const testimonials = [
     {
       id: 1,
-      content: "PoleSwap helped me find the perfect pole for my height and weight. The seller was just 30 minutes away, and I saved over $300 compared to buying new!",
+      content: "PoleSwapper helped me find the perfect pole for my height and weight. The seller was just 30 minutes away, and I saved over $300 compared to buying new!",
       author: "Michael T.",
       role: "High School Vaulter",
       rating: 5
     },
     {
       id: 2,
-      content: "I had three old poles sitting in my garage for years. Listed them on PoleSwap and sold all three within a week. The process couldn't have been easier.",
+      content: "I had three old poles sitting in my garage for years. Listed them on PoleSwapper and sold all three within a week. The process couldn't have been easier.",
       author: "Sarah K.",
       role: "College Coach",
       rating: 5
     },
     {
       id: 3,
-      content: "As a coach for a small school, our budget is tight. PoleSwap allowed us to find quality used poles at prices we could actually afford.",
-      author: "Coach Williams",
-      role: "Middle School Coach",
-      rating: 4
-    },
-    {
-      id: 4,
       content: "The direct messaging feature made it easy to ask detailed questions about the pole's condition before making the drive to see it. Exactly as described!",
       author: "Alex R.",
       role: "College Vaulter",
       rating: 5
     },
-    {
-      id: 5,
-      content: "I was skeptical about buying a used pole online, but PoleSwap's community is trustworthy and the pole I purchased was in even better condition than I expected.",
-      author: "Jamie L.",
-      role: "Club Vaulter",
-      rating: 5
-    }
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -98,7 +84,7 @@ const TestimonialCarousel = () => {
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Hear from the community about their experiences with PoleSwap.</p>
         </div>
         
-        <div className="relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto overflow-hidden">
+        <div className="relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-8 sm:px-10">
           <div className="overflow-hidden rounded-xl shadow-lg">
             <div 
               className={`flex transition-transform duration-500 ease-in-out ${isAnimating ? 'opacity-80' : 'opacity-100'}`}
@@ -137,7 +123,7 @@ const TestimonialCarousel = () => {
           
           <button 
             onClick={prevTestimonial} 
-            className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50"
+            className="absolute left-0 sm:left-0 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50 z-10"
             aria-label="Previous testimonial"
           >
             <ChevronLeft size={16} />
@@ -145,7 +131,7 @@ const TestimonialCarousel = () => {
           
           <button 
             onClick={nextTestimonial}
-            className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50"
+            className="absolute right-0 sm:right-0 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50 z-10"
             aria-label="Next testimonial"
           >
             <ChevronRight size={16} />

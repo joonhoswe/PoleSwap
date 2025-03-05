@@ -45,7 +45,7 @@ export const Navbar = () => {
 
         {/* Desktop Navigation (Moved from 'flex-1 justify-center' to 'ml-auto') */}
         <div className="hidden md:flex items-center gap-8 ml-auto">
-          <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
+          <Link to={RoutePaths.CONTACT} className="hover:text-blue-500">
             Contact Us
           </Link>
           <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
