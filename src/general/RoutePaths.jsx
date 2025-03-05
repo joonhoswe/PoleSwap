@@ -5,4 +5,5 @@ export const RoutePaths = {
   SELL: '/sell',
   CURRENT_LISTING: '/currentlisting/:id',
   DASHBOARD: '/dashboard',
+  CONTACT: '/contact',
 };
