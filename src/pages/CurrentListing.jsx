@@ -112,7 +112,7 @@ export const CurrentListing = () => {
       setShowSignInModal(true);
       return;
     }
-    alert("Please contact owner at: " + listing.owner);
+    alert("Please contact the seller at: " + listing.owner);
   };
 
   const isUserSaved = listing.saved?.includes(userEmail);
