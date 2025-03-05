@@ -18,7 +18,7 @@
   <p> Backend: Django with Python </p> 
   <p> Image Storage: AWS S3 </p>
   <p> Database: PostgreSQL </p> 
-  <p> APIs: Clerk for user authentication </p>
+  <p> APIs/Libraries: Clerk Auth, EmailJS, React-Infinite-Logo-Slider </p>
   <p> Deployments: Vercel[frontend] | Fly.io[backend] | Supabase[database] </p>
   
 </div>
