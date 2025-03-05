@@ -169,8 +169,8 @@ export const Home = () => {
             <div className="relative px-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl">2</div>
               <div className="pt-14 sm:pt-16 px-4 sm:px-6 pb-6 sm:pb-8 bg-white rounded-lg shadow-sm text-center">
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Browse or List</h3>
-                <p className="text-sm text-gray-600">Search for poles that match your needs or list your pole for sale.</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Browse or Sell</h3>
+                <p className="text-sm text-gray-600">Search for poles that match your needs or sell your unused poles.</p>
               </div>
             </div>
             <div className="relative px-3 sm:col-span-2 md:col-span-1 sm:mx-auto md:mx-0 sm:max-w-sm md:max-w-none rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
