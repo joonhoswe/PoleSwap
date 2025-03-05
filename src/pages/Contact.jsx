@@ -53,7 +53,7 @@ export const Contact = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
           <input 
             type="text" 
-            name="user_name" 
+            name="from_name" 
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
@@ -63,7 +63,7 @@ export const Contact = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
           <input 
             type="email" 
-            name="user_email" 
+            name="from_email" 
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
