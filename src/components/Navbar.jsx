@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { RoutePaths } from "../general/RoutePaths";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Bell } from "lucide-react";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +48,13 @@ export const Navbar = () => {
           <Link to={RoutePaths.CONTACT} className="hover:text-blue-500">
             Contact Us
           </Link>
+          <Link to={RoutePaths.UPDATES} className="hover:text-blue-500 flex items-center">
+            Updates
+            <span className="ml-1 relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
+          </Link>
           <Link to={RoutePaths.LISTINGS} className="hover:text-blue-500">
             Browse
           </Link>
@@ -85,7 +92,7 @@ export const Navbar = () => {
         className={`
           absolute top-20 left-0 right-0 bg-white border-b border-gray-200 md:hidden
           overflow-hidden transition-all duration-300 z-50
-          ${isOpen ? 'max-h-[200px] py-4' : 'max-h-0 py-0'}
+          ${isOpen ? 'max-h-[250px] py-4' : 'max-h-0 py-0'}
         `}
       >
         <div className="flex flex-col space-y-4 px-8">
@@ -102,6 +109,17 @@ export const Navbar = () => {
             onClick={() => setIsOpen(false)}
           >
             Sell
+          </Link>
+          <Link
+            to={RoutePaths.UPDATES}
+            className="hover:text-blue-500 transition-colors flex items-center"
+            onClick={() => setIsOpen(false)}
+          >
+            Updates
+            <span className="ml-1 relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
           </Link>
           <SignedIn>
             <Link

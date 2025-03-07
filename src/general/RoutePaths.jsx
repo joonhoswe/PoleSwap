@@ -6,4 +6,5 @@ export const RoutePaths = {
   CURRENT_LISTING: '/currentlisting/:id',
   DASHBOARD: '/dashboard',
   CONTACT: '/contact',
+  UPDATES: '/updates',
 };

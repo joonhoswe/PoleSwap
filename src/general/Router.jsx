@@ -10,6 +10,7 @@ import { Dashboard } from "../pages/Dashboard.jsx";
 import { Contact } from "../pages/Contact.jsx";
 import { NotFound } from "./NotFound.jsx";
 import { Layout } from "./Layout.jsx";
+import UpdatesTab from "../components/UpdatesTab.jsx";
 
 export const Router = () => (
   <Routes>
@@ -68,7 +69,15 @@ export const Router = () => (
           <Contact />
         </Layout>
       }
-    />  
+    />
+    <Route
+      path={RoutePaths.UPDATES}
+      element={
+        <Layout>
+          <UpdatesTab />
+        </Layout>
+      }
+    />
     <Route
       path="*"
       element={
