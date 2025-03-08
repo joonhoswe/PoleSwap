@@ -81,7 +81,7 @@ const TestimonialCarousel = () => {
       <div className="w-full mx-auto px-5 sm:px-6 lg:px-8 max-w-6xl">
         <div className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">What Vaulters Are Saying</h2>
-          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Hear from the community about their experiences with PoleSwap.</p>
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">Hear from the community about their experiences with PoleSwapper.</p>
         </div>
         
         <div className="relative max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-8 sm:px-10">
