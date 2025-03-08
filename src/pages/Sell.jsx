@@ -138,38 +138,46 @@ export const Sell = () => {
         return;
       }
       let finalBrand = brand !== "other" ? brand : brandCustom.trim();
-      let finalWeight = weight !== "other" ? weight : weightCustom.trim();
-      let finalLength;
-      if (length !== "other") {
-        const lengthParts = length.split("'").map(part => part.trim());
-        const feet = parseFloat(lengthParts[0]) || 0;
-        const inches = parseFloat(lengthParts[1]) || 0;
-        finalLength = feet + inches / 12;
-      } else {
-        const feet = parseFloat(lengthFeet || "0");
-        const inches = parseFloat(lengthInches || "0") / 12;
-        finalLength = feet + inches;
-      }
+      let parsedWeight, parsedLength, parsedFlex;
+
       const formattedState = capitalizeFirstLetter(state);
       const formattedCity = capitalizeFirstLetter(city);
       const parsedPrice = parseFloat(price);
-      const parsedWeight = parseInt(finalWeight, 10);
-      const parsedLength = parseFloat(finalLength);
-      const parsedFlex = parseFloat(flex)
+
+      if (itemCategory === "pole") {
+        let finalWeight = weight !== "other" ? weight : weightCustom.trim();
+        let finalLength;
+        
+        if (length !== "other") {
+          finalLength = length;
+        } else {
+          const feet = parseFloat(lengthFeet || "0");
+          const inches = parseFloat(lengthInches || "0") / 12;
+          finalLength = feet + inches;
+        }
+        
+        parsedWeight = parseInt(finalWeight, 10);
+        parsedLength = parseFloat(finalLength);
+        parsedFlex = parseFloat(flex);
+      }
+
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("condition", condition);
       formDataToSend.append("price", parsedPrice);
       formDataToSend.append("brand", finalBrand);
-      formDataToSend.append("weight", parsedWeight);
-      formDataToSend.append("flex", parsedFlex);
-      formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
       formDataToSend.append("itemCategory", itemCategory);
       formDataToSend.append("size", size);
       formDataToSend.append("owner", formData.owner);
       formDataToSend.append("state", formattedState);
       formDataToSend.append("city", formattedCity);
+
+      if (itemCategory === "pole") {
+        formDataToSend.append("weight", parsedWeight);
+        formDataToSend.append("flex", parsedFlex);
+        formDataToSend.append("length", parsedLength);
+      }
 
       for (const image of formData.images) {
         formDataToSend.append("images", image);
