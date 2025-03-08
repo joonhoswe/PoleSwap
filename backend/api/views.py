@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from .models import Object
 from .serializers import ObjectSerializer
-from .utils import upload_to_s3
+from .utils import upload_to_s3, delete_from_s3
 import os
 
 # post
@@ -33,6 +33,8 @@ def createObject(request):
     flex = request.data.get('flex')
     weight = request.data.get('weight')
     condition = request.data.get('condition')
+    size = request.data.get('size')
+    itemCategory = request.data.get('itemCategory')
     price = request.data.get('price')
     title = request.data.get('title')
     description = request.data.get('description')
@@ -47,6 +49,8 @@ def createObject(request):
         'flex': flex,
         'weight': weight,
         'condition': condition,
+        'size': size,
+        'itemCategory': itemCategory,
         'price': price,
         'title': title,
         'description': description,
@@ -89,6 +93,8 @@ def deleteObject(request, id):
     obj = get_object_or_404(Object, id=id)
     if request.method == 'DELETE':
         # add code to delete from S3
+        for image_url in obj.image_urls:
+            delete_from_s3(image_url)
         obj.delete()
         return Response({'message': 'Object deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 

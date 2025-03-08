@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     os.environ.get('DEPLOYED_BACKEND_URL'),
-    "https://www.poleswapper.com"
+    "https://www.poleswapper.com",
 ]
 
 AWS_ACCESS_KEY = os.environ.get('AWS_MY_ACCESS_KEY')

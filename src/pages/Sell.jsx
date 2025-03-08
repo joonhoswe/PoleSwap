@@ -17,6 +17,8 @@ export const Sell = () => {
     price: "",
     brand: "",
     brandCustom: "",
+    itemCategory: "",
+    size: "",
     length: "",
     lengthFeet: "",
     lengthInches: "",
@@ -109,6 +111,7 @@ export const Sell = () => {
         price,
         brand,
         brandCustom,
+        itemCategory,
         length,
         lengthFeet,
         lengthInches,
@@ -117,17 +120,20 @@ export const Sell = () => {
         flex,
         description,
         state,
-        city
+        city,
+        size
       } = formData;
       if (
         !title ||
         !condition ||
         !price ||
         (!brand && !brandCustom) ||
-        (!length && !lengthFeet && !lengthInches) ||
-        (!weight && !weightCustom) || !flex ||
+        (!itemCategory) ||
+        ((itemCategory === "spikes" || itemCategory === "clothes") && (!size)) ||
+        ((itemCategory === "pole") && (!length && !lengthFeet && !lengthInches) && (!weight && !weightCustom) && (!flex)) ||
         !description || !state || !city
       ) {
+        console.log(formData)
         setError("Please fill in all required fields.");
         return;
       }
@@ -159,6 +165,8 @@ export const Sell = () => {
       formDataToSend.append("flex", parsedFlex);
       formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
+      formDataToSend.append("itemCategory", itemCategory);
+      formDataToSend.append("size", size);
       formDataToSend.append("owner", formData.owner);
       formDataToSend.append("state", formattedState);
       formDataToSend.append("city", formattedCity);
@@ -192,7 +200,7 @@ export const Sell = () => {
   };
 
   useEffect(() => {
-  }, [posted]);
+  }, [posted, formData.itemCategory]);
 
   if (!isSignedIn) {
     return (
@@ -299,6 +307,27 @@ export const Sell = () => {
               </select>
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Item Category <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="itemCategory"
+              value={formData.itemCategory}
+              onChange={handleChange}
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+            >
+              <option value="">Select Item Category</option>
+              <option value="pole">Pole</option>
+              <option value="spikes">Spikes</option>
+              <option value="clothes">Clothes</option>
+              <option value="pit">Pit</option>
+              <option value="standards">Standards</option>
+              <option value="bar">Crossbar/Bungee</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
          
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -311,14 +340,34 @@ export const Sell = () => {
               className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
             >
               <option value="">Select Brand</option>
-              <option value="essx">ESSX</option>
-              <option value="spirit">UCS Spirit</option>
-              <option value="pacer">Pacer</option>
-              <option value="skypole">Skypole</option>
-              <option value="dynasty">Dynasty</option>
-              <option value="nordic">Nordic</option>
-              <option value="fibersport">Fibersport</option>
-              <option value="other">Other</option>
+              {formData.itemCategory === "pole" && (
+                <>
+                <option value="essx">ESSX</option>
+                <option value="spirit">UCS Spirit</option>
+                <option value="pacer">Pacer</option>
+                <option value="skypole">Skypole</option>
+                <option value="dynasty">Dynasty</option>
+                <option value="nordic">Nordic</option>
+                <option value="fibersport">Fibersport</option>
+                <option value="other">Other</option>
+                </>
+              )}
+              {(formData.itemCategory === "spikes" || formData.itemCategory === "clothes")&& (
+                <>
+                <option value="nike">Nike</option>
+                <option value="puma">Puma</option>
+                <option value="adidas">Adidas</option>
+                <option value="other">Other</option>
+                </>
+              )}
+              {(formData.itemCategory === "pit" || formData.itemCategory === "standards"  || formData.itemCategory === "bar") && (
+                <>
+                <option value="gill">Gill Athletics</option>
+                <option value="richey">Richey Athletics</option>
+                <option value="first place">First Place</option>
+                <option value="other">Other</option>
+                </>
+              )}
             </select>
             {formData.brand === "other" && (
               <input
@@ -331,9 +380,10 @@ export const Sell = () => {
               />
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+          {formData.itemCategory === "pole" && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Length (ft) <span className="text-red-500">*</span>
               </label>
               <select
@@ -419,8 +469,46 @@ export const Sell = () => {
                 placeholder="Enter flex"
                 className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
               />
-            </div>
+            </div> 
           </div>
+          )}
+
+          {(formData.itemCategory === "spikes" || formData.itemCategory === "clothes") && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Size <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="size"
+                value={formData.size}
+                onChange={handleChange}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select Size</option>
+                  {formData.itemCategory === "spikes" && [...Array(30)].map((_, i) => {
+                    const size = 3 + i * .5;
+                    return (
+                      <option key={size} value={size}>
+                        Mens {size} / Womens {size + 1.5}
+                      </option>
+                    );
+                  })}
+                  {formData.itemCategory === "clothes" && (
+                    <>
+                    <option value="xxs"> XXS </option>
+                    <option value="xs"> XS </option>
+                    <option value="s"> S </option>
+                    <option value="m"> M </option>
+                    <option value="l"> L </option>
+                    <option value="xl"> XL </option>
+                    <option value="xxl"> XXL </option>
+                    </>
+                  )}
+                <option value="other">Other</option>
+              </select>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Description <span className="text-red-500">*</span>
