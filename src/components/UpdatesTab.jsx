@@ -17,9 +17,8 @@ const UpdatesTab = () => {
       version: "v1.0.0",
       date: "March 6th 2025",
       features: [
-        "Improved search functionality",
+        "Integrated filter functionality",
         "Added user profiles",
-        "Enhanced mobile responsiveness"
       ]
     },
   ];
