@@ -214,20 +214,45 @@ export const CurrentListing = () => {
                   <span className="text-gray-600">Condition</span>
                   <span className="font-medium">{capitalizeFirstLetter(listing.condition)}</span>
                 </div>
+                
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Length</span>
-                  <span className="font-medium">
-                    {Math.floor(listing.length)}'
-                    {Math.round((listing.length - Math.floor(listing.length)) * 12)}"
-                  </span>
+                  <span className="text-gray-600">Category</span>
+                  <span className="font-medium">{capitalizeFirstLetter(listing.itemCategory || 'Pole')}</span>
                 </div>
+                
+                {/* Pole-specific details */}
+                {listing.itemCategory === 'pole' && (
+                  <>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Length</span>
+                      <span className="font-medium">
+                        {Math.floor(listing.length)}'
+                        {Math.round((listing.length - Math.floor(listing.length)) * 12)}"
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Weight</span>
+                      <span className="font-medium">{listing.weight} lbs</span>
+                    </div>
+                    <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Flex</span>
+                      <span className="font-medium">{listing.flex}</span>
+                    </div>
+                  </>
+                )}
+                
+                {/* Spikes and Clothes specific details */}
+                {(listing.itemCategory === 'spikes' || listing.itemCategory === 'clothes') && listing.size && (
+                  <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                    <span className="text-gray-600">Size</span>
+                    <span className="font-medium">{listing.size}</span>
+                  </div>
+                )}
+                
+                {/* Brand information for all items */}
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Weight</span>
-                  <span className="font-medium">{listing.weight} lbs</span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Flex</span>
-                  <span className="font-medium">{listing.flex}</span>
+                  <span className="text-gray-600">Brand</span>
+                  <span className="font-medium">{capitalizeFirstLetter(listing.brand)}</span>
                 </div>
               </div>
               <div className="mb-6">

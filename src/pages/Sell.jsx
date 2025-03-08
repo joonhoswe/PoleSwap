@@ -17,6 +17,8 @@ export const Sell = () => {
     price: "",
     brand: "",
     brandCustom: "",
+    itemCategory: "",
+    size: "",
     length: "",
     lengthFeet: "",
     lengthInches: "",
@@ -80,7 +82,7 @@ export const Sell = () => {
     }
 
     if (name === 'city') {
-      const regex = /^$|^[a-zA-Z]+$/;
+      const regex = /^$|^[a-zA-Z ]+$/;
       if (!regex.test(value)) return;
     }
 
@@ -109,6 +111,7 @@ export const Sell = () => {
         price,
         brand,
         brandCustom,
+        itemCategory,
         length,
         lengthFeet,
         lengthInches,
@@ -117,82 +120,119 @@ export const Sell = () => {
         flex,
         description,
         state,
-        city
+        city,
+        size,
+        images
       } = formData;
+
+      // Validation
       if (
         !title ||
         !condition ||
         !price ||
         (!brand && !brandCustom) ||
-        (!length && !lengthFeet && !lengthInches) ||
-        (!weight && !weightCustom) || !flex ||
-        !description || !state || !city
+        !itemCategory ||
+        ((itemCategory === "spikes" || itemCategory === "clothes") && !size) ||
+        (itemCategory === "pole" && ((!length && !(lengthFeet && lengthInches)) || (!weight && !weightCustom) || !flex)) ||
+        !description || !state || !city || images.length === 0
       ) {
-        setError("Please fill in all required fields.");
+        console.log("Missing required fields:", formData);
+        setError("Please fill in all required fields and add at least one image.");
+        setIsSubmitting(false);
         return;
       }
-      let finalBrand = brand !== "other" ? brand : brandCustom.trim();
-      let finalWeight = weight !== "other" ? weight : weightCustom.trim();
-      let finalLength;
-      if (length !== "other") {
-        const lengthParts = length.split("'").map(part => part.trim());
-        const feet = parseFloat(lengthParts[0]) || 0;
-        const inches = parseFloat(lengthParts[1]) || 0;
-        finalLength = feet + inches / 12;
-      } else {
-        const feet = parseFloat(lengthFeet || "0");
-        const inches = parseFloat(lengthInches || "0") / 12;
-        finalLength = feet + inches;
-      }
+
+      // Process data
+      const finalBrand = brand !== "other" ? brand : brandCustom.trim();
       const formattedState = capitalizeFirstLetter(state);
       const formattedCity = capitalizeFirstLetter(city);
       const parsedPrice = parseFloat(price);
-      const parsedWeight = parseInt(finalWeight, 10);
-      const parsedLength = parseFloat(finalLength);
-      const parsedFlex = parseFloat(flex)
+
+      // Create FormData
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("condition", condition);
       formDataToSend.append("price", parsedPrice);
       formDataToSend.append("brand", finalBrand);
-      formDataToSend.append("weight", parsedWeight);
-      formDataToSend.append("flex", parsedFlex);
-      formDataToSend.append("length", parsedLength);
       formDataToSend.append("description", description);
+      formDataToSend.append("itemCategory", itemCategory);
       formDataToSend.append("owner", formData.owner);
       formDataToSend.append("state", formattedState);
       formDataToSend.append("city", formattedCity);
-
-      for (const image of formData.images) {
+      
+      // Category-specific fields
+      if (itemCategory === "pole") {
+        // Handle length
+        let finalLength;
+        if (length && length !== "other") {
+          finalLength = parseFloat(length);
+        } else {
+          const feet = parseFloat(lengthFeet || "0");
+          const inches = parseFloat(lengthInches || "0") / 12;
+          finalLength = feet + inches;
+        }
+        
+        // Handle weight
+        let finalWeight;
+        if (weight && weight !== "other") {
+          finalWeight = parseInt(weight, 10);
+        } else {
+          finalWeight = parseInt(weightCustom, 10);
+        }
+        
+        // Handle flex
+        const parsedFlex = parseFloat(flex);
+        
+        // Add pole-specific fields to FormData
+        formDataToSend.append("length", finalLength.toString());
+        formDataToSend.append("weight", finalWeight.toString());
+        formDataToSend.append("flex", parsedFlex.toString());
+      } else {
+        // For non-pole items, set default values
+        formDataToSend.append("length", "0");
+        formDataToSend.append("weight", "0");
+        formDataToSend.append("flex", "0");
+      }
+      
+      // Add size (for all items - use 'n/a' as default for items without size)
+      formDataToSend.append("size", size || "n/a");
+      
+      // Add images
+      for (const image of images) {
         formDataToSend.append("images", image);
       }
+
+      // Log the data being sent
+      console.log("Sending data:", Object.fromEntries(formDataToSend.entries()));
+      
+      // Make API request
       const response = await fetch(`${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/post/`, {
         method: "POST",
         body: formDataToSend,
       });
+      
+      // Handle errors
       if (!response.ok) {
-        throw new Error("Failed to create listing");
+        const errorText = await response.text();
+        console.error("Server response:", response.status, errorText);
+        throw new Error(`Server returned ${response.status}: ${errorText}`);
       }
 
+      // Handle success
       const data = await response.json();
       setListingId(data.id);
       setPosted(true);
 
     } catch (err) {
-      setError("Failed to create listing. Please try again.");
-      
-      if (err.response) {
-        const errorMessage = await err.response.text();
-        console.error('Server response:', errorMessage);
-        setError(`Server error: ${errorMessage}`);
-      }
+      console.error("Error creating listing:", err);
+      setError(`Failed to create listing: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
-  }, [posted]);
+  }, [posted, formData.itemCategory]);
 
   if (!isSignedIn) {
     return (
@@ -299,6 +339,27 @@ export const Sell = () => {
               </select>
             </div>
           </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Item Category <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="itemCategory"
+              value={formData.itemCategory}
+              onChange={handleChange}
+              className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+            >
+              <option value="">Select Item Category</option>
+              <option value="pole">Pole</option>
+              <option value="spikes">Spikes</option>
+              <option value="clothes">Clothes</option>
+              <option value="pit">Pit</option>
+              <option value="standards">Standards</option>
+              <option value="bar">Crossbar/Bungee</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
          
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -311,14 +372,34 @@ export const Sell = () => {
               className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
             >
               <option value="">Select Brand</option>
-              <option value="essx">ESSX</option>
-              <option value="spirit">UCS Spirit</option>
-              <option value="pacer">Pacer</option>
-              <option value="skypole">Skypole</option>
-              <option value="dynasty">Dynasty</option>
-              <option value="nordic">Nordic</option>
-              <option value="fibersport">Fibersport</option>
-              <option value="other">Other</option>
+              {formData.itemCategory === "pole" && (
+                <>
+                <option value="essx">ESSX</option>
+                <option value="spirit">UCS Spirit</option>
+                <option value="pacer">Pacer</option>
+                <option value="skypole">Skypole</option>
+                <option value="dynasty">Dynasty</option>
+                <option value="nordic">Nordic</option>
+                <option value="fibersport">Fibersport</option>
+                <option value="other">Other</option>
+                </>
+              )}
+              {(formData.itemCategory === "spikes" || formData.itemCategory === "clothes")&& (
+                <>
+                <option value="nike">Nike</option>
+                <option value="puma">Puma</option>
+                <option value="adidas">Adidas</option>
+                <option value="other">Other</option>
+                </>
+              )}
+              {(formData.itemCategory === "pit" || formData.itemCategory === "standards"  || formData.itemCategory === "bar") && (
+                <>
+                <option value="gill">Gill Athletics</option>
+                <option value="richey">Richey Athletics</option>
+                <option value="first place">First Place</option>
+                <option value="other">Other</option>
+                </>
+              )}
             </select>
             {formData.brand === "other" && (
               <input
@@ -331,9 +412,10 @@ export const Sell = () => {
               />
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+          {formData.itemCategory === "pole" && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Length (ft) <span className="text-red-500">*</span>
               </label>
               <select
@@ -419,8 +501,46 @@ export const Sell = () => {
                 placeholder="Enter flex"
                 className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:outline-none"
               />
-            </div>
+            </div> 
           </div>
+          )}
+
+          {(formData.itemCategory === "spikes" || formData.itemCategory === "clothes") && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Size <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="size"
+                value={formData.size}
+                onChange={handleChange}
+                className="w-full h-12 rounded-lg border border-gray-300 px-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Select Size</option>
+                  {formData.itemCategory === "spikes" && [...Array(30)].map((_, i) => {
+                    const size = 3 + i * .5;
+                    return (
+                      <option key={size} value={size}>
+                        Mens {size} / Womens {size + 1.5}
+                      </option>
+                    );
+                  })}
+                  {formData.itemCategory === "clothes" && (
+                    <>
+                    <option value="xxs"> XXS </option>
+                    <option value="xs"> XS </option>
+                    <option value="s"> S </option>
+                    <option value="m"> M </option>
+                    <option value="l"> L </option>
+                    <option value="xl"> XL </option>
+                    <option value="xxl"> XXL </option>
+                    </>
+                  )}
+                <option value="other">Other</option>
+              </select>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Description <span className="text-red-500">*</span>
