@@ -47,7 +47,7 @@ const UpdatesTab = () => {
             }`}
           >
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-bold text-xl text-gray-800">
+              <h3 className="font-bold text-xl text-gray-800 flex items-center">
                 {update.version}
                 {update.isUpcoming && (
                   <span className="ml-2 text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800">
