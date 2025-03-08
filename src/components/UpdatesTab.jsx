@@ -6,7 +6,6 @@ const UpdatesTab = () => {
       version: "v1.1.0",
       date: "Expected End of March 2025",
       features: [
-        "Sell pole vault pits, spikes, and other vaulting equipment",
         "Direct 1-on-1 messaging with sellers",
         "Filter listings within 10, 25, or 50 miles of your zip code"
       ],
@@ -16,9 +15,10 @@ const UpdatesTab = () => {
         version: "v1.0.1",
         date: "March 8th 2025",
         features: [
+          "Ability to sell pole vault pits, spikes, and other vaulting equipment!",
+          "Filter listings by a range of length and weights",
           "Added filtering by flex",
           "Added FiberSport brand",
-          "Filter listings by a range of length and weights",
         ]
     },
     {
