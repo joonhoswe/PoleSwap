@@ -12,7 +12,11 @@ const MobileFilterMenu = ({
   currentBrandOptions 
 }) => {
   const [showBrands, setShowBrands] = useState(false);
-
+  
+  // Define clothing and shoe sizes
+  const clothingSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  const shoeSizes = Array.from({ length: 25 }, (_, i) => (6 + i * 0.5).toFixed(1).replace('.0', ''));
+  
   return (
     <>
       {/* Overlay */}
@@ -38,22 +42,6 @@ const MobileFilterMenu = ({
 
         {/* Filter Content */}
         <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-          {/* Category */}
-          <div>
-            <label className="font-medium">Category</label>
-            <select 
-                name="category" 
-                onChange={handleCategoryChange} 
-                value={filters.category}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            >
-                {categories.map(category => (
-                    <option key={category.value} value={category.value}>
-                        {category.label}
-                    </option>
-                ))}
-            </select>
-          </div>
           
           {/* State */}
           <div>
@@ -85,6 +73,63 @@ const MobileFilterMenu = ({
                 className="w-full rounded-lg border border-gray-300 px-4 py-2"
             />
           </div>
+
+          {/* Category */}
+          <div>
+            <label className="font-medium">Category</label>
+            <select 
+                name="category" 
+                onChange={handleCategoryChange} 
+                value={filters.category}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+            >
+                {categories.map(category => (
+                    <option key={category.value} value={category.value}>
+                        {category.label}
+                    </option>
+                ))}
+            </select>
+          </div>
+
+          {/* Size Filter for Spikes */}
+          {filters.category === 'spikes' && (
+            <div>
+              <label className="block font-medium mb-1">Shoe Size</label>
+              <select
+                name="size"
+                value={filters.size || ''}
+                onChange={handleFilterChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              >
+                <option value="">All Sizes</option>
+                {shoeSizes.map(size => (
+                  <option key={size} value={size}>
+                    {`Men's ${size} / Women's ${(parseFloat(size) + 1.5).toFixed(1).replace('.0', '')}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Size Filter for Clothes */}
+          {filters.category === 'clothes' && (
+            <div>
+              <label className="block font-medium mb-1">Clothing Size</label>
+              <select
+                name="size"
+                value={filters.size || ''}
+                onChange={handleFilterChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              >
+                <option value="">All Sizes</option>
+                {clothingSizes.map(size => (
+                  <option key={size} value={size.toLowerCase()}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Brand (Checkboxes) - Only show for relevant category */}
           {currentBrandOptions.length > 0 && (

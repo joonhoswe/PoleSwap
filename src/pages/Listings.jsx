@@ -327,23 +327,6 @@ export const Listings = () => {
             <div className="w-full hidden md:block md:w-72 border-r border-gray-200 p-4 overflow-y-auto">
                 <h2 className="text-xl font-bold mb-6">Browse</h2>
                 <div className="space-y-6">
-                    {/* Category Filter - New! */}
-                    <div className="space-y-2">
-                        <label className="font-medium">Category</label>
-                        <select 
-                            name="category" 
-                            onChange={handleCategoryChange} 
-                            value={filters.category}
-                            className="w-full rounded-lg border border-gray-300 px-4 py-2"
-                        >
-                            {categories.map(category => (
-                                <option key={category.value} value={category.value}>
-                                    {category.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
                     {/* State Filter */}
                     <div className="space-y-2">
                         <label className="font-medium">State</label>
@@ -375,6 +358,55 @@ export const Listings = () => {
                         >
                         </input>
                     </div>
+
+                    {/* Item Category Filter */}
+                    <div className="space-y-2">
+                        <label className="font-medium">Category</label>
+                        <select 
+                            name="category" 
+                            onChange={handleCategoryChange} 
+                            value={filters.category}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                        >
+                            {categories.map(category => (
+                                <option key={category.value} value={category.value}>
+                                    {category.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+
+                    {/* Size Filter for Spikes and Clothes - Add this to the desktop sidebar */}
+                    {(filters.category === 'spikes' || filters.category === 'clothes') && (
+                        <div className="space-y-2">
+                            <label className="font-medium">
+                                {filters.category === 'spikes' ? 'Shoe Size' : 'Clothing Size'}
+                            </label>
+                            <select
+                                name="size"
+                                value={filters.size || ''}
+                                onChange={handleFilterChange}
+                                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                            >
+                                <option value="">All Sizes</option>
+                                {filters.category === 'spikes' && 
+                                    Array.from({ length: 30 }, (_, i) => (3 + i * 0.5).toFixed(1).replace('.0', '')).map(size => (
+                                        <option key={size} value={size}>
+                                            {`Men's ${size} / Women's ${(parseFloat(size) + 1.5).toFixed(1).replace('.0', '')}`}
+                                        </option>
+                                    ))
+                                }
+                                {filters.category === 'clothes' && 
+                                    ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                                        <option key={size} value={size.toLowerCase()}>
+                                            {size}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    )}
 
                     {/* Brand Filter (Checkbox) - Only show for relevant category */}
                     {currentBrandOptions.length > 0 && (
