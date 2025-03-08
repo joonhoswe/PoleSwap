@@ -76,6 +76,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
               <option value="dynasty">Dynasty</option>
               <option value="nordic">Nordic</option>
               <option value="altius">Altius</option>
+              <option value="fibersport">Fibersport</option>
             </select>
           </div>
 
@@ -121,6 +122,31 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
             </select>
           </div>
 
+          {/* Flex Range */}
+          <div>
+            <label className="block font-medium mb-1">Flex Range</label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                name="flexMin"
+                placeholder="Min"
+                value={filters.flexMin}
+                onChange={handleFilterChange}
+                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                min={0}
+              />
+              <input
+                type="number"
+                name="flexMax"
+                placeholder="Max"
+                value={filters.flexMax}
+                onChange={handleFilterChange}
+                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                min={0}
+              />
+            </div>
+          </div>
+
           {/* Price Range */}
           <div>
             <label className="block font-medium mb-1">Price Range</label>
@@ -132,6 +158,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 value={filters.priceMin}
                 onChange={handleFilterChange}
                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                min={0}
               />
               <input
                 type="number"
@@ -140,6 +167,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 value={filters.priceMax}
                 onChange={handleFilterChange}
                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                min={0}
               />
             </div>
           </div>
