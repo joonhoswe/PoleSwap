@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { X } from 'lucide-react';
 
-const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states }) => {
+const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states, brandOptions }) => {
   return (
     <>
       {/* Overlay */}
@@ -59,73 +59,157 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
             </input>
           </div>
 
-          {/* Brand */}
+          {/* Brand (Checkboxes) */}
           <div>
-            <label className="block font-medium mb-1">Brand</label>
-            <select 
-              name="brand" 
-              onChange={handleFilterChange}
-              value={filters.brand}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            >
-              <option value="">All Brands</option>
-              <option value="essx">ESSX</option>
-              <option value="spirit">UCS Spirit</option>
-              <option value="pacer">Pacer</option>
-              <option value="skypole">Skypole</option>
-              <option value="dynasty">Dynasty</option>
-              <option value="nordic">Nordic</option>
-              <option value="altius">Altius</option>
-              <option value="fibersport">Fibersport</option>
-            </select>
+            <label className="block font-medium mb-2">Brand</label>
+            <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+              {brandOptions.map(brand => (
+                <label key={brand.value} className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name={brand.filterKey}
+                    className="form-checkbox text-blue-500 rounded mr-1.5"
+                    checked={filters[brand.filterKey]}
+                    onChange={handleFilterChange}
+                  />
+                  <span className="text-sm">{brand.label}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
-          {/* Length */}
+          {/* Length Filter */}
           <div>
-            <label className="block font-medium mb-1">Length</label>
-            <select 
-              name="length" 
-              onChange={handleFilterChange}
-              value={filters.length}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            >
-              <option value="">All Lengths</option>
-              {[...Array(23)].map((_, i) => {
-                const length = 6 + i * 0.5;
-                return (
-                  <option key={length} value={length}>
-                    {`${Math.floor(length)}' ${length % 1 ? '6"' : '0"'}`}
-                  </option>
-                );
-              })}
-            </select>
+            <div className="flex justify-between items-center mb-1">
+              <label className="font-medium">Length</label>
+              <label className="inline-flex items-center text-sm">
+                <input
+                  type="checkbox"
+                  name="useLengthRange"
+                  className="form-checkbox text-blue-500 rounded mr-1.5"
+                  checked={filters.useLengthRange}
+                  onChange={handleFilterChange}
+                />
+                <span>Use range</span>
+              </label>
+            </div>
+            
+            {!filters.useLengthRange ? (
+              // Single Length Dropdown
+              <select 
+                name="length" 
+                onChange={handleFilterChange}
+                value={filters.length}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              >
+                <option value="">All Lengths</option>
+                {[...Array(23)].map((_, i) => {
+                  const length = 6 + i * 0.5;
+                  return (
+                    <option key={length} value={length}>
+                      {`${Math.floor(length)}' ${length % 1 ? '6"' : '0"'}`}
+                    </option>
+                  );
+                })}
+              </select>
+            ) : (
+              // Length Range Inputs
+              <div className="flex gap-2 items-center">
+                <input
+                  type="number"
+                  name="lengthMin"
+                  placeholder="Min"
+                  value={filters.lengthMin}
+                  onChange={handleFilterChange}
+                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                  min={6}
+                  max={17}
+                  step={0.5}
+                />
+                <span className="text-gray-500">to</span>
+                <input
+                  type="number"
+                  name="lengthMax"
+                  placeholder="Max"
+                  value={filters.lengthMax}
+                  onChange={handleFilterChange}
+                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                  min={6}
+                  max={17}
+                  step={0.5}
+                />
+              </div>
+            )}
           </div>
 
-          {/* Weight */}
+          {/* Weight Filter */}
           <div>
-            <label className="block font-medium mb-1">Weight (lbs)</label>
-            <select 
-              name="weight" 
-              onChange={handleFilterChange}
-              value={filters.weight}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            >
-              <option value="">All Weights</option>
-              {[...Array(39)].map((_, i) => {
-                const weight = 50 + i * 5;
-                return (
-                  <option key={weight} value={weight}>
-                    {weight}
-                  </option>
-                );
-              })}
-            </select>
+            <div className="flex justify-between items-center mb-1">
+              <label className="font-medium">Weight</label>
+              <label className="inline-flex items-center text-sm">
+                <input
+                  type="checkbox"
+                  name="useWeightRange"
+                  className="form-checkbox text-blue-500 rounded mr-1.5"
+                  checked={filters.useWeightRange}
+                  onChange={handleFilterChange}
+                />
+                <span>Use range</span>
+              </label>
+            </div>
+            
+            {!filters.useWeightRange ? (
+              // Single Weight Dropdown
+              <select 
+                name="weight" 
+                onChange={handleFilterChange}
+                value={filters.weight}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+              >
+                <option value="">All Weights</option>
+                {[...Array(39)].map((_, i) => {
+                  const weight = 50 + i * 5;
+                  return (
+                    <option key={weight} value={weight}>
+                      {weight} lbs
+                    </option>
+                  );
+                })}
+              </select>
+            ) : (
+              // Weight Range Inputs
+              <div className="flex gap-2 items-center">
+                <input
+                  type="number"
+                  name="weightMin"
+                  placeholder="Min"
+                  value={filters.weightMin}
+                  onChange={handleFilterChange}
+                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                  min={50}
+                  max={240}
+                  step={5}
+                />
+                <span className="text-gray-500">to</span>
+                <input
+                  type="number"
+                  name="weightMax"
+                  placeholder="Max"
+                  value={filters.weightMax}
+                  onChange={handleFilterChange}
+                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                  min={50}
+                  max={240}
+                  step={5}
+                />
+              </div>
+            )}
           </div>
 
           {/* Flex Range */}
           <div>
             <label className="block font-medium mb-1">Flex Range</label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <input
                 type="number"
                 name="flexMin"
@@ -135,6 +219,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
                 min={0}
               />
+              <span className="text-gray-500">to</span>
               <input
                 type="number"
                 name="flexMax"
@@ -149,8 +234,8 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
 
           {/* Price Range */}
           <div>
-            <label className="block font-medium mb-1">Price Range</label>
-            <div className="flex gap-2">
+            <label className="block font-medium mb-1">Price Range ($)</label>
+            <div className="flex gap-2 items-center">
               <input
                 type="number"
                 name="priceMin"
@@ -160,6 +245,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
                 min={0}
               />
+              <span className="text-gray-500">to</span>
               <input
                 type="number"
                 name="priceMax"
@@ -180,7 +266,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 <input
                   type="checkbox"
                   name="conditionNew"
-                  className="form-checkbox text-blue-500"
+                  className="form-checkbox text-blue-500 rounded"
                   checked={filters.conditionNew}
                   onChange={handleFilterChange}
                 />
@@ -190,7 +276,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 <input
                   type="checkbox"
                   name="conditionUsed"
-                  className="form-checkbox text-blue-500"
+                  className="form-checkbox text-blue-500 rounded"
                   checked={filters.conditionUsed}
                   onChange={handleFilterChange}
                 />

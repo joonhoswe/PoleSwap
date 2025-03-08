@@ -7,7 +7,6 @@ const UpdatesTab = () => {
       date: "Expected End of March 2025",
       features: [
         "Sell pole vault pits, spikes, and other vaulting equipment",
-        "Filter listings by a range of length and weights",
         "Direct 1-on-1 messaging with sellers",
         "Filter listings within 10, 25, or 50 miles of your zip code"
       ],
@@ -19,6 +18,7 @@ const UpdatesTab = () => {
         features: [
           "Added filtering by flex",
           "Added FiberSport brand",
+          "Filter listings by a range of length and weights",
         ]
     },
     {
