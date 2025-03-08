@@ -317,7 +317,7 @@ export const Sell = () => {
               <option value="skypole">Skypole</option>
               <option value="dynasty">Dynasty</option>
               <option value="nordic">Nordic</option>
-              <option value="altius">Altius</option>
+              <option value="fibersport">Fibersport</option>
               <option value="other">Other</option>
             </select>
             {formData.brand === "other" && (

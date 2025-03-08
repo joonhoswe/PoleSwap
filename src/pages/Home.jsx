@@ -10,6 +10,8 @@ import ucs from '../assets/ucs.png';
 import pacer from '../assets/pacer.png';
 import nordic from '../assets/nordic.png';
 import dynasty from '../assets/dynasty.png';
+import fibersport from '../assets/fibersport.png';
+
 export const Home = () => {
   return (
     <div className="flex flex-col flex-1 overflow-x-hidden w-full">
@@ -95,6 +97,9 @@ export const Home = () => {
               </Slider.Slide>
               <Slider.Slide>
                 <img src={dynasty} alt="Dynasty Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
+              </Slider.Slide>
+              <Slider.Slide>
+                <img src={fibersport} alt="Fibersport Logo" className="w-24 sm:w-28 md:w-36 h-auto mx-2 sm:mx-4" />
               </Slider.Slide>
             </Slider>
           </div>

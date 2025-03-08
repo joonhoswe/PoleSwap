@@ -14,6 +14,14 @@ const UpdatesTab = () => {
       isUpcoming: true
     },
     {
+        version: "v1.0.1",
+        date: "March 8th 2025",
+        features: [
+          "Added filtering by flex",
+          "Added FiberSport brand",
+        ]
+    },
+    {
       version: "v1.0.0",
       date: "March 6th 2025",
       features: [

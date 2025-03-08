@@ -18,6 +18,8 @@ export const Listings = () => {
         brand: '',
         length: '',
         weight: '',
+        flexMin: '',
+        flexMax: '',
         priceMin: '',
         priceMax: '',
         conditionNew: false,
@@ -76,6 +78,12 @@ export const Listings = () => {
         }
         if (filters.priceMax) {
             filtered = filtered.filter(listing => listing.price <= filters.priceMax);
+        }
+        if (filters.flexMin) {
+            filtered = filtered.filter(listing => listing.flex >= filters.flexMin);
+        }
+        if (filters.flexMax) {
+            filtered = filtered.filter(listing => listing.flex <= filters.flexMax);
         }
         if (filters.conditionNew) {
             filtered = filtered.filter(listing => listing.condition === 'new');
@@ -193,6 +201,7 @@ export const Listings = () => {
                             <option value="dynasty">Dynasty</option>
                             <option value="nordic">Nordic</option>
                             <option value="altius">Altius</option>
+                            <option value="fibersport">Fibersport</option>
                         </select>
                     </div>
 
@@ -238,6 +247,34 @@ export const Listings = () => {
                         </select>
                     </div>
 
+                    {/* Flex Filter */}
+                    <div className="space-y-2">
+                        <label className="font-medium">Flex</label>
+                        <div className="flex gap-2">
+                            <input
+                                type="number"
+                                name="flexMin"
+                                placeholder="Min"
+                                value={filters.flexMin}
+                                onChange={handleFilterChange}
+                                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                                min={0}
+                                max={100}
+                            />
+                            <input
+                                type="number"
+                                name="flexMax"
+                                placeholder="Max"
+                                value={filters.flexMax}
+                                onChange={handleFilterChange}
+                                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                                min={0}
+                                max={100}
+                            />
+                        </div>
+                    </div>
+
+
                     {/* Price Range */}
                     <div className="space-y-2">
                         <label className="font-medium">Price Range</label>
@@ -249,6 +286,7 @@ export const Listings = () => {
                                 value={filters.priceMin}
                                 onChange={handleFilterChange}
                                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                                min={0}
                             />
                             <input
                                 type="number"
@@ -257,6 +295,7 @@ export const Listings = () => {
                                 value={filters.priceMax}
                                 onChange={handleFilterChange}
                                 className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                                min={0}
                             />
                         </div>
                     </div>
