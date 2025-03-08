@@ -121,46 +121,34 @@ export const Sell = () => {
         description,
         state,
         city,
-        size
+        size,
+        images
       } = formData;
+
+      // Validation
       if (
         !title ||
         !condition ||
         !price ||
         (!brand && !brandCustom) ||
-        (!itemCategory) ||
-        ((itemCategory === "spikes" || itemCategory === "clothes") && (!size)) ||
-        ((itemCategory === "pole") && (!length && !lengthFeet && !lengthInches) && (!weight && !weightCustom) && (!flex)) ||
-        !description || !state || !city
+        !itemCategory ||
+        ((itemCategory === "spikes" || itemCategory === "clothes") && !size) ||
+        (itemCategory === "pole" && ((!length && !(lengthFeet && lengthInches)) || (!weight && !weightCustom) || !flex)) ||
+        !description || !state || !city || images.length === 0
       ) {
-        console.log(formData)
-        setError("Please fill in all required fields.");
+        console.log("Missing required fields:", formData);
+        setError("Please fill in all required fields and add at least one image.");
+        setIsSubmitting(false);
         return;
       }
-      let finalBrand = brand !== "other" ? brand : brandCustom.trim();
-      let parsedWeight, parsedLength, parsedFlex;
 
+      // Process data
+      const finalBrand = brand !== "other" ? brand : brandCustom.trim();
       const formattedState = capitalizeFirstLetter(state);
       const formattedCity = capitalizeFirstLetter(city);
       const parsedPrice = parseFloat(price);
 
-      if (itemCategory === "pole") {
-        let finalWeight = weight !== "other" ? weight : weightCustom.trim();
-        let finalLength;
-        
-        if (length !== "other") {
-          finalLength = length;
-        } else {
-          const feet = parseFloat(lengthFeet || "0");
-          const inches = parseFloat(lengthInches || "0") / 12;
-          finalLength = feet + inches;
-        }
-        
-        parsedWeight = parseInt(finalWeight, 10);
-        parsedLength = parseFloat(finalLength);
-        parsedFlex = parseFloat(flex);
-      }
-
+      // Create FormData
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("condition", condition);
@@ -168,40 +156,76 @@ export const Sell = () => {
       formDataToSend.append("brand", finalBrand);
       formDataToSend.append("description", description);
       formDataToSend.append("itemCategory", itemCategory);
-      formDataToSend.append("size", size);
       formDataToSend.append("owner", formData.owner);
       formDataToSend.append("state", formattedState);
       formDataToSend.append("city", formattedCity);
-
+      
+      // Category-specific fields
       if (itemCategory === "pole") {
-        formDataToSend.append("weight", parsedWeight);
-        formDataToSend.append("flex", parsedFlex);
-        formDataToSend.append("length", parsedLength);
+        // Handle length
+        let finalLength;
+        if (length && length !== "other") {
+          finalLength = parseFloat(length);
+        } else {
+          const feet = parseFloat(lengthFeet || "0");
+          const inches = parseFloat(lengthInches || "0") / 12;
+          finalLength = feet + inches;
+        }
+        
+        // Handle weight
+        let finalWeight;
+        if (weight && weight !== "other") {
+          finalWeight = parseInt(weight, 10);
+        } else {
+          finalWeight = parseInt(weightCustom, 10);
+        }
+        
+        // Handle flex
+        const parsedFlex = parseFloat(flex);
+        
+        // Add pole-specific fields to FormData
+        formDataToSend.append("length", finalLength.toString());
+        formDataToSend.append("weight", finalWeight.toString());
+        formDataToSend.append("flex", parsedFlex.toString());
+      } else {
+        // For non-pole items, set default values
+        formDataToSend.append("length", "0");
+        formDataToSend.append("weight", "0");
+        formDataToSend.append("flex", "0");
       }
-
-      for (const image of formData.images) {
+      
+      // Add size (for all items - use 'n/a' as default for items without size)
+      formDataToSend.append("size", size || "n/a");
+      
+      // Add images
+      for (const image of images) {
         formDataToSend.append("images", image);
       }
+
+      // Log the data being sent
+      console.log("Sending data:", Object.fromEntries(formDataToSend.entries()));
+      
+      // Make API request
       const response = await fetch(`${import.meta.env.VITE_DEPLOYED_BACKEND_URL}/api/post/`, {
         method: "POST",
         body: formDataToSend,
       });
+      
+      // Handle errors
       if (!response.ok) {
-        throw new Error("Failed to create listing");
+        const errorText = await response.text();
+        console.error("Server response:", response.status, errorText);
+        throw new Error(`Server returned ${response.status}: ${errorText}`);
       }
 
+      // Handle success
       const data = await response.json();
       setListingId(data.id);
       setPosted(true);
 
     } catch (err) {
-      setError("Failed to create listing. Please try again.");
-      
-      if (err.response) {
-        const errorMessage = await err.response.text();
-        console.error('Server response:', errorMessage);
-        setError(`Server error: ${errorMessage}`);
-      }
+      console.error("Error creating listing:", err);
+      setError(`Failed to create listing: ${err.message || "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
