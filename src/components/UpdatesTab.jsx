@@ -3,7 +3,7 @@ import React from 'react';
 const UpdatesTab = () => {
   const updates = [
     {
-      version: "v1.1.0 (Coming Soon)",
+      version: "v1.1.0",
       date: "Expected End of March 2025",
       features: [
         "Sell pole vault pits, spikes, and other vaulting equipment",
@@ -51,7 +51,7 @@ const UpdatesTab = () => {
                 {update.version}
                 {update.isUpcoming && (
                   <span className="ml-2 text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800">
-                    Upcoming
+                    Coming Soon
                   </span>
                 )}
               </h3>
