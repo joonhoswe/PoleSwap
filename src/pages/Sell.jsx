@@ -82,7 +82,7 @@ export const Sell = () => {
     }
 
     if (name === 'city') {
-      const regex = /^$|^[a-zA-Z]+$/;
+      const regex = /^$|^[a-zA-Z ]+$/;
       if (!regex.test(value)) return;
     }
 

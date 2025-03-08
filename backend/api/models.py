@@ -9,7 +9,7 @@ class Object(models.Model):
     flex = models.DecimalField(max_digits=4, decimal_places=2, default=Decimal('0.00'))
     weight = models.IntegerField(default='-1')
     condition = models.CharField(max_length=20, default='not specified')
-    size = models.CharField(max_length=7, default='n/a')
+    size = models.CharField(max_length=30, default='n/a')
     itemCategory = models.CharField(max_length=20, null=True, blank=True)
     price = models.DecimalField(max_digits=9, decimal_places=2, default=Decimal('0.00'))
     title = models.CharField(max_length=100, default='not specified')

@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
-const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states, brandOptions }) => {
+const MobileFilterMenu = ({ 
+  filters, 
+  handleFilterChange, 
+  handleCategoryChange,
+  isOpen, 
+  onClose, 
+  states, 
+  categories,
+  currentBrandOptions 
+}) => {
+  const [showBrands, setShowBrands] = useState(false);
+
   return (
     <>
       {/* Overlay */}
@@ -27,6 +38,23 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
 
         {/* Filter Content */}
         <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
+          {/* Category */}
+          <div>
+            <label className="font-medium">Category</label>
+            <select 
+                name="category" 
+                onChange={handleCategoryChange} 
+                value={filters.category}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2"
+            >
+                {categories.map(category => (
+                    <option key={category.value} value={category.value}>
+                        {category.label}
+                    </option>
+                ))}
+            </select>
+          </div>
+          
           {/* State */}
           <div>
             <label className="font-medium">State</label>
@@ -55,184 +83,201 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
                 onChange={handleFilterChange} 
                 value={filters.city}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2"
-            >
-            </input>
+            />
           </div>
 
-          {/* Brand (Checkboxes) */}
-          <div>
-            <label className="block font-medium mb-2">Brand</label>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-2">
-              {brandOptions.map(brand => (
-                <label key={brand.value} className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    name={brand.filterKey}
-                    className="form-checkbox text-blue-500 rounded mr-1.5"
-                    checked={filters[brand.filterKey]}
+          {/* Brand (Checkboxes) - Only show for relevant category */}
+          {currentBrandOptions.length > 0 && (
+            <div>
+              <button 
+                onClick={() => setShowBrands(!showBrands)}
+                className="flex justify-between items-center w-full py-2"
+              >
+                <span className="font-medium">Brand</span>
+                <span className="text-sm text-blue-600">
+                  {showBrands ? "Hide" : "Show options"}
+                </span>
+              </button>
+              
+              {showBrands && (
+                <div className="grid grid-cols-2 gap-x-2 gap-y-2 mt-2">
+                  {currentBrandOptions.map(brand => (
+                    <label key={brand.value} className="inline-flex items-center">
+                      <input
+                        type="checkbox"
+                        name={brand.filterKey}
+                        className="form-checkbox text-blue-500 rounded mr-1.5"
+                        checked={filters[brand.filterKey]}
+                        onChange={handleFilterChange}
+                      />
+                      <span className="text-sm">{brand.label}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Pole-specific filters */}
+          {(!filters.category || filters.category === 'pole') && (
+            <>
+              {/* Length Filter */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="font-medium">Length</label>
+                  <label className="inline-flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      name="useLengthRange"
+                      className="form-checkbox text-blue-500 rounded mr-1.5"
+                      checked={filters.useLengthRange}
+                      onChange={handleFilterChange}
+                    />
+                    <span>Use range</span>
+                  </label>
+                </div>
+                
+                {!filters.useLengthRange ? (
+                  // Single Length Dropdown
+                  <select 
+                    name="length" 
                     onChange={handleFilterChange}
+                    value={filters.length}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  >
+                    <option value="">All Lengths</option>
+                    {[...Array(23)].map((_, i) => {
+                      const length = 6 + i * 0.5;
+                      return (
+                        <option key={length} value={length}>
+                          {`${Math.floor(length)}' ${length % 1 ? '6"' : '0"'}`}
+                        </option>
+                      );
+                    })}
+                  </select>
+                ) : (
+                  // Length Range Inputs
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="number"
+                      name="lengthMin"
+                      placeholder="Min"
+                      value={filters.lengthMin}
+                      onChange={handleFilterChange}
+                      className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                      min={6}
+                      max={17}
+                      step={0.5}
+                    />
+                    <span className="text-gray-500">to</span>
+                    <input
+                      type="number"
+                      name="lengthMax"
+                      placeholder="Max"
+                      value={filters.lengthMax}
+                      onChange={handleFilterChange}
+                      className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                      min={6}
+                      max={17}
+                      step={0.5}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Weight Filter */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="font-medium">Weight (lbs)</label>
+                  <label className="inline-flex items-center text-sm">
+                    <input
+                      type="checkbox"
+                      name="useWeightRange"
+                      className="form-checkbox text-blue-500 rounded mr-1.5"
+                      checked={filters.useWeightRange}
+                      onChange={handleFilterChange}
+                    />
+                    <span>Use range</span>
+                  </label>
+                </div>
+                
+                {!filters.useWeightRange ? (
+                  // Single Weight Dropdown
+                  <select 
+                    name="weight" 
+                    onChange={handleFilterChange}
+                    value={filters.weight}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2"
+                  >
+                    <option value="">All Weights</option>
+                    {[...Array(39)].map((_, i) => {
+                      const weight = 50 + i * 5;
+                      return (
+                        <option key={weight} value={weight}>
+                          {weight} lbs
+                        </option>
+                      );
+                    })}
+                  </select>
+                ) : (
+                  // Weight Range Inputs
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="number"
+                      name="weightMin"
+                      placeholder="Min"
+                      value={filters.weightMin}
+                      onChange={handleFilterChange}
+                      className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                      min={50}
+                      max={240}
+                      step={5}
+                    />
+                    <span className="text-gray-500">to</span>
+                    <input
+                      type="number"
+                      name="weightMax"
+                      placeholder="Max"
+                      value={filters.weightMax}
+                      onChange={handleFilterChange}
+                      className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                      min={50}
+                      max={240}
+                      step={5}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Flex Range */}
+              <div>
+                <label className="block font-medium mb-1">Flex Range</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="number"
+                    name="flexMin"
+                    placeholder="Min"
+                    value={filters.flexMin}
+                    onChange={handleFilterChange}
+                    className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                    min={0}
                   />
-                  <span className="text-sm">{brand.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Length Filter */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="font-medium">Length</label>
-              <label className="inline-flex items-center text-sm">
-                <input
-                  type="checkbox"
-                  name="useLengthRange"
-                  className="form-checkbox text-blue-500 rounded mr-1.5"
-                  checked={filters.useLengthRange}
-                  onChange={handleFilterChange}
-                />
-                <span>Use range</span>
-              </label>
-            </div>
-            
-            {!filters.useLengthRange ? (
-              // Single Length Dropdown
-              <select 
-                name="length" 
-                onChange={handleFilterChange}
-                value={filters.length}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2"
-              >
-                <option value="">All Lengths</option>
-                {[...Array(23)].map((_, i) => {
-                  const length = 6 + i * 0.5;
-                  return (
-                    <option key={length} value={length}>
-                      {`${Math.floor(length)}' ${length % 1 ? '6"' : '0"'}`}
-                    </option>
-                  );
-                })}
-              </select>
-            ) : (
-              // Length Range Inputs
-              <div className="flex gap-2 items-center">
-                <input
-                  type="number"
-                  name="lengthMin"
-                  placeholder="Min"
-                  value={filters.lengthMin}
-                  onChange={handleFilterChange}
-                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                  min={6}
-                  max={17}
-                  step={0.5}
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                  type="number"
-                  name="lengthMax"
-                  placeholder="Max"
-                  value={filters.lengthMax}
-                  onChange={handleFilterChange}
-                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                  min={6}
-                  max={17}
-                  step={0.5}
-                />
+                  <span className="text-gray-500">to</span>
+                  <input
+                    type="number"
+                    name="flexMax"
+                    placeholder="Max"
+                    value={filters.flexMax}
+                    onChange={handleFilterChange}
+                    className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
+                    min={0}
+                  />
+                </div>
               </div>
-            )}
-          </div>
+            </>
+          )}
 
-          {/* Weight Filter */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="font-medium">Weight</label>
-              <label className="inline-flex items-center text-sm">
-                <input
-                  type="checkbox"
-                  name="useWeightRange"
-                  className="form-checkbox text-blue-500 rounded mr-1.5"
-                  checked={filters.useWeightRange}
-                  onChange={handleFilterChange}
-                />
-                <span>Use range</span>
-              </label>
-            </div>
-            
-            {!filters.useWeightRange ? (
-              // Single Weight Dropdown
-              <select 
-                name="weight" 
-                onChange={handleFilterChange}
-                value={filters.weight}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2"
-              >
-                <option value="">All Weights</option>
-                {[...Array(39)].map((_, i) => {
-                  const weight = 50 + i * 5;
-                  return (
-                    <option key={weight} value={weight}>
-                      {weight} lbs
-                    </option>
-                  );
-                })}
-              </select>
-            ) : (
-              // Weight Range Inputs
-              <div className="flex gap-2 items-center">
-                <input
-                  type="number"
-                  name="weightMin"
-                  placeholder="Min"
-                  value={filters.weightMin}
-                  onChange={handleFilterChange}
-                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                  min={50}
-                  max={240}
-                  step={5}
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                  type="number"
-                  name="weightMax"
-                  placeholder="Max"
-                  value={filters.weightMax}
-                  onChange={handleFilterChange}
-                  className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                  min={50}
-                  max={240}
-                  step={5}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Flex Range */}
-          <div>
-            <label className="block font-medium mb-1">Flex Range</label>
-            <div className="flex gap-2 items-center">
-              <input
-                type="number"
-                name="flexMin"
-                placeholder="Min"
-                value={filters.flexMin}
-                onChange={handleFilterChange}
-                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                min={0}
-              />
-              <span className="text-gray-500">to</span>
-              <input
-                type="number"
-                name="flexMax"
-                placeholder="Max"
-                value={filters.flexMax}
-                onChange={handleFilterChange}
-                className="w-1/2 rounded-lg border border-gray-300 px-4 py-2"
-                min={0}
-              />
-            </div>
-          </div>
-
-          {/* Price Range */}
+          {/* Price Range - Common for all categories */}
           <div>
             <label className="block font-medium mb-1">Price Range ($)</label>
             <div className="flex gap-2 items-center">
@@ -258,7 +303,7 @@ const MobileFilterMenu = ({ filters, handleFilterChange, isOpen, onClose, states
             </div>
           </div>
 
-          {/* Condition */}
+          {/* Condition - Common for all categories */}
           <div>
             <label className="block font-medium mb-1">Condition</label>
             <div className="flex items-center space-x-4">
